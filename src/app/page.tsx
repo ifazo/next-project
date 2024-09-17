@@ -1,11 +1,15 @@
 import { CarouselPlugin } from "@/components/CarouselPlugin";
-import HeroSection from "@/components/HeroSection";
+import CategoriesOverview from "@/components/CategoriesOverview";
+import ProductCarousel from "@/components/ProductCarousel";
+import HeroCarousel from "@/components/HeroCarousel";
 
 export default function Home() {
   return (
     <div>
-      <HeroSection />
+      <HeroCarousel />
       <CarouselPlugin />
+      <CategoriesOverview />
+      <ProductCarousel />
     </div>
   )
 }

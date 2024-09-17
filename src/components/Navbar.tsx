@@ -24,34 +24,22 @@ export default function Navbar() {
                     <span className="sr-only">Acme Inc</span>
                 </Link>
                 <Link
-                    href="#"
+                    href="/categories"
                     className="text-muted-foreground transition-colors hover:text-foreground"
                 >
-                    Dashboard
+                    Categories
                 </Link>
                 <Link
-                    href="#"
-                    className="text-muted-foreground transition-colors hover:text-foreground"
-                >
-                    Orders
-                </Link>
-                <Link
-                    href="#"
+                    href="/products"
                     className="text-muted-foreground transition-colors hover:text-foreground"
                 >
                     Products
                 </Link>
                 <Link
-                    href="#"
+                    href="/dashboard"
                     className="text-muted-foreground transition-colors hover:text-foreground"
                 >
-                    Customers
-                </Link>
-                <Link
-                    href="#"
-                    className="text-foreground transition-colors hover:text-foreground"
-                >
-                    Settings
+                    Dashboard
                 </Link>
             </nav>
             <Sheet>
@@ -70,20 +58,14 @@ export default function Navbar() {
                             <Package2 className="h-6 w-6" />
                             <span className="sr-only">Acme Inc</span>
                         </Link>
-                        <Link href="#" className="text-muted-foreground hover:text-foreground">
-                            Dashboard
+                        <Link href="/categories" className="text-muted-foreground hover:text-foreground">
+                            Categories
                         </Link>
-                        <Link href="#" className="text-muted-foreground hover:text-foreground">
-                            Orders
-                        </Link>
-                        <Link href="#" className="text-muted-foreground hover:text-foreground">
+                        <Link href="/products" className="text-muted-foreground hover:text-foreground">
                             Products
                         </Link>
-                        <Link href="#" className="text-muted-foreground hover:text-foreground">
-                            Customers
-                        </Link>
-                        <Link href="#" className="hover:text-foreground">
-                            Settings
+                        <Link href="/dashboard" className="hover:text-foreground">
+                            Dashboard
                         </Link>
                     </nav>
                 </SheetContent>
