@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
-import { Libre_Baskerville } from "next/font/google";
+import { Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { Providers } from "./providers";
+import { Toaster } from "@/components/ui/toaster"
 
-const libreBaskerville = Libre_Baskerville({
-  weight: "400",
+const playfairDisplay = Playfair_Display({
   subsets: ["latin"],
+  weight: "500",
 });
 
 export const metadata: Metadata = {
@@ -21,14 +23,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Providers>
       <head>
         <link rel="icon" href="/img/favicon.png" type="image/png" sizes="any" />
       </head>
-      <body className={`${libreBaskerville.className} antialiased`}>
+      <body className={`${playfairDisplay.className} antialiased`}>
         <Navbar />
-        {children}
+          <main>{children}</main>
+          <Toaster />
         <Footer />
-      </body>
+        </body>
+      </Providers>
     </html>
   );
 }

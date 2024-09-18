@@ -1,103 +1,156 @@
-import Link from "next/link";
-import { Package2, Menu, Search, CircleUser } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Input } from "@/components/ui/input";
+'use client'
+
+import { useState } from 'react'
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+    Dialog,
+    DialogBackdrop,
+    DialogPanel,
+    PopoverGroup,
+} from '@headlessui/react'
+import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import Image from 'next/image'
+
+const pages = [
+    { name: 'Categories', href: '/categories' },
+    { name: 'Products', href: '/products' },
+    { name: 'About', href: '/about' },
+    { name: 'Contact', href: '/contact' },
+]
 
 export default function Navbar() {
+    const [open, setOpen] = useState(false)
+
     return (
-        <header className="fixed top-0 left-0 right-0 z-50 flex h-16 items-center gap-4 border-b bg-white px-4 shadow-md md:px-6"> {/* Changed to fixed and solid bg */}
-            <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
-                <Link
-                    href="#"
-                    className="flex items-center gap-2 text-lg font-semibold md:text-base"
-                >
-                    <Package2 className="h-6 w-6" />
-                    <span className="sr-only">Acme Inc</span>
-                </Link>
-                <Link
-                    href="/categories"
-                    className="text-muted-foreground transition-colors hover:text-foreground"
-                >
-                    Categories
-                </Link>
-                <Link
-                    href="/products"
-                    className="text-muted-foreground transition-colors hover:text-foreground"
-                >
-                    Products
-                </Link>
-                <Link
-                    href="/dashboard"
-                    className="text-muted-foreground transition-colors hover:text-foreground"
-                >
-                    Dashboard
-                </Link>
-            </nav>
-            <Sheet>
-                <SheetTrigger asChild>
-                    <Button variant="outline" size="icon" className="shrink-0 md:hidden">
-                        <Menu className="h-5 w-5" />
-                        <span className="sr-only">Toggle navigation menu</span>
-                    </Button>
-                </SheetTrigger>
-                <SheetContent side="left">
-                    <nav className="grid gap-6 text-lg font-medium">
-                        <Link
-                            href="#"
-                            className="flex items-center gap-2 text-lg font-semibold"
-                        >
-                            <Package2 className="h-6 w-6" />
-                            <span className="sr-only">Acme Inc</span>
-                        </Link>
-                        <Link href="/categories" className="text-muted-foreground hover:text-foreground">
-                            Categories
-                        </Link>
-                        <Link href="/products" className="text-muted-foreground hover:text-foreground">
-                            Products
-                        </Link>
-                        <Link href="/dashboard" className="hover:text-foreground">
-                            Dashboard
-                        </Link>
-                    </nav>
-                </SheetContent>
-            </Sheet>
-            <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
-                <form className="ml-auto flex-1 sm:flex-initial">
-                    <div className="relative">
-                        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                        <Input
-                            type="search"
-                            placeholder="Search products..."
-                            className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
-                        />
+        <div className="bg-white">
+            {/* Mobile menu */}
+            <Dialog open={open} onClose={setOpen} className="relative z-40 lg:hidden">
+                <DialogBackdrop
+                    transition
+                    className="fixed inset-0 bg-black bg-opacity-25 transition-opacity duration-300 ease-linear data-[closed]:opacity-0"
+                />
+
+                <div className="fixed inset-0 z-40 flex">
+                    <DialogPanel
+                        transition
+                        className="relative flex w-full max-w-xs transform flex-col overflow-y-auto bg-white pb-12 shadow-xl transition duration-300 ease-in-out data-[closed]:-translate-x-full"
+                    >
+                        <div className="flex px-4 pb-2 pt-5">
+                            <button
+                                type="button"
+                                onClick={() => setOpen(false)}
+                                className="relative -m-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400"
+                            >
+                                <span className="absolute -inset-0.5" />
+                                <span className="sr-only">Close menu</span>
+                                <XMarkIcon aria-hidden="true" className="h-6 w-6" />
+                            </button>
+                        </div>
+
+                        <div className="space-y-6 border-t border-gray-200 px-4 py-6">
+                            {pages.map((page) => (
+                                <div key={page.name} className="flow-root">
+                                    <a href={page.href} className="-m-2 block p-2 font-medium text-gray-900">
+                                        {page.name}
+                                    </a>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="space-y-6 border-t border-gray-200 px-4 py-6">
+                            <div className="flow-root">
+                                <a href="/sign-in" className="-m-2 block p-2 font-medium text-gray-900">
+                                    Sign in
+                                </a>
+                            </div>
+                            <div className="flow-root">
+                                <a href="/sign-up" className="-m-2 block p-2 font-medium text-gray-900">
+                                    Create account
+                                </a>
+                            </div>
+                        </div>
+
+                    </DialogPanel>
+                </div>
+            </Dialog>
+
+            <header className="relative bg-white">
+                <nav aria-label="Top" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <div className="border-b border-gray-200">
+                        <div className="flex h-16 items-center">
+                            <button
+                                type="button"
+                                onClick={() => setOpen(true)}
+                                className="relative rounded-md bg-white p-2 text-gray-400 lg:hidden"
+                            >
+                                <span className="absolute -inset-0.5" />
+                                <span className="sr-only">Open menu</span>
+                                <Bars3Icon aria-hidden="true" className="h-6 w-6" />
+                            </button>
+
+                            {/* Logo */}
+                            <div className="ml-4 flex lg:ml-0">
+                                <a href="/">
+                                    <span className="sr-only">Logo</span>
+                                    <Image
+                                        height={32}
+                                        width={32}
+                                        alt="logo"
+                                        src="/img/logo.png"
+                                        className="h-8 w-auto"
+                                    />
+                                </a>
+                            </div>
+
+                            {/* Flyout menus */}
+                            <PopoverGroup className="hidden lg:ml-8 lg:block lg:self-stretch">
+                                <div className="flex h-full space-x-8">
+                                    {pages.map((page) => (
+                                        <a
+                                            key={page.name}
+                                            href={page.href}
+                                            className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
+                                        >
+                                            {page.name}
+                                        </a>
+                                    ))}
+                                </div>
+                            </PopoverGroup>
+
+                            <div className="ml-auto flex items-center">
+                                <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
+                                    <a href="/sign-in" className="text-sm font-medium text-gray-700 hover:text-gray-800">
+                                        Sign in
+                                    </a>
+                                    <span aria-hidden="true" className="h-6 w-px bg-gray-200" />
+                                    <a href="/sign-up" className="text-sm font-medium text-gray-700 hover:text-gray-800">
+                                        Create account
+                                    </a>
+                                </div>
+
+                                {/* Search */}
+                                <div className="flex lg:ml-6">
+                                    <a href="/" className="p-2 text-gray-400 hover:text-gray-500">
+                                        <span className="sr-only">Search</span>
+                                        <MagnifyingGlassIcon aria-hidden="true" className="h-6 w-6" />
+                                    </a>
+                                </div>
+
+                                {/* Cart */}
+                                <div className="ml-4 flow-root lg:ml-6">
+                                    <a href="/" className="group -m-2 flex items-center p-2">
+                                        <ShoppingBagIcon
+                                            aria-hidden="true"
+                                            className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                                        />
+                                        <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
+                                        <span className="sr-only">items in cart, view bag</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </form>
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="secondary" size="icon" className="rounded-full">
-                            <CircleUser className="h-5 w-5" />
-                            <span className="sr-only">Toggle user menu</span>
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>Settings</DropdownMenuItem>
-                        <DropdownMenuItem>Support</DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>Logout</DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            </div>
-        </header>
-    );
+                </nav>
+            </header>
+        </div>
+    )
 }
