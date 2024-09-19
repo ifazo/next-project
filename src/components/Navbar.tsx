@@ -9,6 +9,8 @@ import {
 } from '@headlessui/react'
 import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
+import BagModal from './BagModal'
+import { useAppSelector } from '@/store/hook'
 
 const pages = [
     { name: 'Categories', href: '/categories' },
@@ -19,6 +21,11 @@ const pages = [
 
 export default function Navbar() {
     const [open, setOpen] = useState(false)
+    const [isBagOpen, setIsBagOpen] = useState(false)
+
+    const products = useAppSelector((state) => state.cart.cart)
+    // console.log(products)
+    const totalProducts = products.reduce((total) => total + 1, 0);
 
     return (
         <div className="bg-white">
@@ -72,6 +79,8 @@ export default function Navbar() {
                     </DialogPanel>
                 </div>
             </Dialog>
+
+            <BagModal open={isBagOpen} setOpen={setIsBagOpen} products={products} />
 
             <header className="relative bg-white">
                 <nav aria-label="Top" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -137,14 +146,19 @@ export default function Navbar() {
 
                                 {/* Cart */}
                                 <div className="ml-4 flow-root lg:ml-6">
-                                    <a href="/" className="group -m-2 flex items-center p-2">
+                                    <button
+                                        type='button'
+                                        onClick={() => setIsBagOpen(true)}
+                                        className="group -m-2 flex items-center p-2">
                                         <ShoppingBagIcon
                                             aria-hidden="true"
                                             className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                                         />
-                                        <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
+                                        <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+                                            {totalProducts}
+                                        </span>
                                         <span className="sr-only">items in cart, view bag</span>
-                                    </a>
+                                    </button>
                                 </div>
                             </div>
                         </div>
