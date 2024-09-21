@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
     Dialog,
     DialogBackdrop,
@@ -11,6 +11,9 @@ import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, XMarkIcon } from '@her
 import Image from 'next/image'
 import BagModal from './BagModal'
 import { useAppSelector } from '@/store/hook'
+import { useToast } from '@/hooks/use-toast'
+import supabase from '@/lib/supabase'
+import { User } from '@supabase/supabase-js'
 
 const pages = [
     { name: 'Categories', href: '/categories' },
@@ -23,9 +26,45 @@ export default function Navbar() {
     const [open, setOpen] = useState(false)
     const [isBagOpen, setIsBagOpen] = useState(false)
 
+    const [user, setUser] = useState<User | null>(null)
+
     const products = useAppSelector((state) => state.cart.cart)
-    // console.log(products)
-    const totalProducts = products.reduce((total) => total + 1, 0);
+    const totalProducts = products.reduce((total) => total + 1, 0)
+
+    const { toast } = useToast()
+
+    useEffect(() => {
+        const checkUser = async () => {
+            const { data: { session } } = await supabase.auth.getSession()
+            setUser(session?.user ?? null)
+        }
+        checkUser()
+
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            setUser(session?.user ?? null)
+        })
+
+        return () => {
+            subscription?.unsubscribe()
+        }
+    }, [])
+
+    const handleSignOut = async () => {
+        const { error } = await supabase.auth.signOut()
+        if (error) {
+            toast({
+                variant: 'destructive',
+                title: 'Error',
+                description: error.message,
+            })
+        } else {
+            toast({
+                title: 'Success',
+                description: 'Signed out successfully',
+            })
+            setUser(null) 
+        }
+    }
 
     return (
         <div className="bg-white">
@@ -64,16 +103,36 @@ export default function Navbar() {
                         </div>
 
                         <div className="space-y-6 border-t border-gray-200 px-4 py-6">
-                            <div className="flow-root">
-                                <a href="/sign-in" className="-m-2 block p-2 font-medium text-gray-900">
-                                    Sign in
-                                </a>
-                            </div>
-                            <div className="flow-root">
-                                <a href="/sign-up" className="-m-2 block p-2 font-medium text-gray-900">
-                                    Create account
-                                </a>
-                            </div>
+                            {!user ? (
+                                <>
+                                    <div className="flow-root">
+                                        <a href="/sign-up" className="-m-2 block p-2 font-medium text-gray-900">
+                                            Create account
+                                        </a>
+                                    </div>
+                                    <div className="flow-root">
+                                        <a href="/sign-in" className="-m-2 block p-2 font-medium text-gray-900">
+                                            Sign in
+                                        </a>
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="flow-root">
+                                        <a href="/dashboard" className="-m-2 block p-2 font-medium text-gray-900">
+                                            Dashboard
+                                        </a>
+                                    </div>
+                                    <div className="flow-root">
+                                        <button
+                                            type="button"
+                                            onClick={handleSignOut}
+                                            className="-m-2 block p-2 font-medium text-gray-900">
+                                            Sign out
+                                        </button>
+                                    </div>
+                                </>
+                            )}
                         </div>
 
                     </DialogPanel>
@@ -126,15 +185,31 @@ export default function Navbar() {
                             </PopoverGroup>
 
                             <div className="ml-auto flex items-center">
-                                <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                                    <a href="/sign-in" className="text-sm font-medium text-gray-700 hover:text-gray-800">
-                                        Sign in
-                                    </a>
-                                    <span aria-hidden="true" className="h-6 w-px bg-gray-200" />
-                                    <a href="/sign-up" className="text-sm font-medium text-gray-700 hover:text-gray-800">
-                                        Create account
-                                    </a>
-                                </div>
+                                {/* Conditional Links based on auth state */}
+                                {!user ? (
+                                    <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
+                                        <a href="/sign-up" className="text-sm font-medium text-gray-700 hover:text-gray-800">
+                                            Create account
+                                        </a>
+                                        <span aria-hidden="true" className="h-6 w-px bg-gray-200" />
+                                        <a href="/sign-in" className="text-sm font-medium text-gray-700 hover:text-gray-800">
+                                            Sign in
+                                        </a>
+                                    </div>
+                                ) : (
+                                    <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
+                                        <a href="/dashboard" className="text-sm font-medium text-gray-700 hover:text-gray-800">
+                                            Dashboard
+                                        </a>
+                                        <span aria-hidden="true" className="h-6 w-px bg-gray-200" />
+                                        <button
+                                            type="button"
+                                            onClick={handleSignOut}
+                                            className="text-sm font-medium text-gray-700 hover:text-gray-800">
+                                            Sign out
+                                        </button>
+                                    </div>
+                                )}
 
                                 {/* Search */}
                                 <div className="flex lg:ml-6">

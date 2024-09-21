@@ -1,5 +1,6 @@
-import Link from "next/link"
+'use client'
 
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import {
     Card,
@@ -10,8 +11,91 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useForm, SubmitHandler } from "react-hook-form"
+import supabase from "@/lib/supabase"
+import { useToast } from '@/hooks/use-toast'
 
-export default function page() {
+type Inputs = {
+    email: string
+    password: string
+}
+
+export default function SignIn() {
+    const { toast } = useToast()
+
+    const {
+        register,
+        handleSubmit,
+        watch,
+        formState: { errors },
+    } = useForm<Inputs>()
+    const onSubmit: SubmitHandler<Inputs> = async (data) => {
+        console.log(data)
+        const { email, password } = data
+        const { error } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+        })
+        if (error) {
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: error.message,
+            })
+        }
+        else {
+            toast({
+                title: "Success",
+                description: `Sign in with ${email}`,
+            })
+        }
+    }
+    console.log(watch("password")) // watch input value by passing the name of it
+
+    const handleGoogleSignIn = async () => {
+        const { error } = await supabase.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+                redirectTo: '/',
+            },
+        })
+        if (error) {
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: error.message,
+            })
+        }
+        else {
+            toast({
+                title: "Success",
+                description: "Sign in with Google",
+            })
+        }
+    }
+
+    const handleGitHubSignIn = async () => {
+        const { error } = await supabase.auth.signInWithOAuth({
+            provider: 'github',
+            options: {
+                redirectTo: '/',
+            },
+        })
+        if (error) {
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: error.message,
+            })
+        }
+        else {
+            toast({
+                title: "Success",
+                description: "Sign in with GitHub",
+            })
+        }
+    }
+
     return (
         <Card className="mx-auto max-w-sm my-8">
             <CardHeader>
@@ -21,30 +105,47 @@ export default function page() {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <div className="grid gap-4">
-                    <div className="grid gap-2">
-                        <Label htmlFor="email">Email</Label>
-                        <Input
-                            id="email"
-                            type="email"
-                            placeholder="m@example.com"
-                            required
-                        />
-                    </div>
-                    <div className="grid gap-2">
-                        <div className="flex items-center">
-                            <Label htmlFor="password">Password</Label>
-                            <Link href="/forget" className="ml-auto inline-block text-sm underline">
-                                Forget your password?
-                            </Link>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <div className="grid gap-4">
+                        <div className="grid gap-2">
+                            <Label htmlFor="email">Email</Label>
+                            <Input
+                                {...register("email", { required: true })}
+                                placeholder="mail@example.com"
+                                type="email"
+                            />
+                            {errors.email && <span>Email field is required</span>}
                         </div>
-                        <Input id="password" type="password" required />
+                        <div className="grid gap-2">
+                            <div className="flex items-center">
+                                <Label htmlFor="password">Password</Label>
+                                <Link href="/forget" className="ml-auto inline-block text-sm underline">
+                                    Forget your password?
+                                </Link>
+                            </div>
+                            <Input
+                                {...register("password", { required: true })}
+                                type="password"
+                            />
+                            {errors.password && <span>Password field is required</span>}
+                        </div>
+                        <Button type="submit" className="w-full">
+                            Sign in
+                        </Button>
                     </div>
-                    <Button type="submit" className="w-full">
-                        Sign in
-                    </Button>
-                    <Button variant="outline" className="w-full">
+                </form>
+                <div className="mt-4 text-center text-sm">
+                    <Button
+                        onClick={handleGoogleSignIn}
+                        variant="outline" className="w-full">
                         Sign in with Google
+                    </Button>
+                </div>
+                <div className="mt-4 text-center text-sm">
+                    <Button
+                        onClick={handleGitHubSignIn}
+                        variant="outline" className="w-full">
+                        Sign in with GitHub
                     </Button>
                 </div>
                 <div className="mt-4 text-center text-sm">
@@ -54,6 +155,6 @@ export default function page() {
                     </Link>
                 </div>
             </CardContent>
-        </Card>
+        </Card >
     )
 }

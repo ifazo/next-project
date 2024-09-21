@@ -17,6 +17,7 @@ const product = {
     name: 'Basic Tee 6-Pack',
     price: 192,
     category: 'Shirts',
+    quantity: 1,
     images: [
         {
             src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-secondary-product-shot.jpg',
