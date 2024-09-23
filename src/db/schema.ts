@@ -11,6 +11,7 @@ export const productsTable = pgTable("products_table", {
     id: serial("id").primaryKey(),
     name: varchar("name", { length: 255 }).notNull(),
     price: integer("price").notNull(),
+    stock: integer("stock").notNull(),
     category: varchar("category", { length: 100 }).notNull(),
     images: json("images").notNull(), // Storing the array of images as JSON
     colors: json("colors").notNull(), // Storing the colors array as JSON
@@ -35,6 +36,22 @@ export const reviewsTable = pgTable('reviews_table', {
         .$onUpdate(() => new Date()),
 });
 
+export const ordersTable = pgTable('orders_table', {
+    id: serial('id').primaryKey(),
+    userId: integer('user_id')
+        .notNull()
+        .references(() => usersTable.id, { onDelete: 'cascade' }),
+    productId: integer('product_id')
+        .notNull()
+        .references(() => productsTable.id, { onDelete: 'cascade' }),
+    quantity: integer('quantity').notNull(),
+    status: varchar('status', { length: 100 }).notNull(),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+    updatedAt: timestamp('updated_at')
+        .notNull()
+        .$onUpdate(() => new Date()),
+});
+
 export type InsertUser = typeof usersTable.$inferInsert;
 export type SelectUser = typeof usersTable.$inferSelect;
 
@@ -43,3 +60,6 @@ export type SelectProduct = typeof productsTable.$inferSelect;
 
 export type InsertReview = typeof reviewsTable.$inferInsert;
 export type SelectReview = typeof reviewsTable.$inferSelect;
+
+export type InsertOrder = typeof ordersTable.$inferInsert;
+export type SelectOrder = typeof ordersTable.$inferSelect;

@@ -4,6 +4,7 @@ import { Product } from '@/types';
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
+import Link from 'next/link';
 
 interface BagModalProps {
     open: boolean;
@@ -110,16 +111,16 @@ export default function BagModal({ open, setOpen, products }: BagModalProps) {
                                         </div>
                                         <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
                                         <div className="mt-6">
-                                            <a
-                                                href="#"
+                                            <Link
+                                                href="/dashboard/cart"
+                                                onClick={() => setOpen(false)}
                                                 className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
                                             >
-                                                Checkout
-                                            </a>
+                                                View Cart
+                                            </Link>
                                         </div>
                                         <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                                             <p>
-                                                or{' '}
                                                 <button
                                                     type="button"
                                                     onClick={() => setOpen(false)}
