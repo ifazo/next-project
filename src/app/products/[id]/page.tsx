@@ -1,63 +1,58 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { StarIcon } from '@heroicons/react/20/solid'
 import { Radio, RadioGroup } from '@headlessui/react'
 import Image from 'next/image'
 import { useAppDispatch } from '@/store/hook'
 import { addProduct } from '@/store/features/cart/cartSlice'
-import type { Product } from '@/types'
-
-
 import { useToast } from "@/hooks/use-toast"
 import { ToastAction } from "@/components/ui/toast"
+import { Product } from '@prisma/client'
+import { useParams } from 'next/navigation'
 
-const product = {
-    id: 1,
-    name: 'Basic Tee 6-Pack',
-    price: 192,
-    category: 'Shirts',
-    quantity: 1,
-    images: [
-        {
-            src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-secondary-product-shot.jpg',
-        },
-        {
-            src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-01.jpg',
-        },
-        {
-            src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-02.jpg',
-        },
-        {
-            src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-featured-product-shot.jpg',
-        },
-    ],
-    colors: [
-        { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
-        { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
-        { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900' },
-    ],
-    sizes: [
-        { name: 'XXS', inStock: false },
-        { name: 'XS', inStock: true },
-        { name: 'S', inStock: true },
-        { name: 'M', inStock: true },
-        { name: 'L', inStock: true },
-        { name: 'XL', inStock: true },
-        { name: '2XL', inStock: true },
-        { name: '3XL', inStock: true },
-    ],
-    description:
-        'The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: "Black". Need to add an extra pop of color to your outfit? Our white tee has you covered.',
-    highlights: [
-        'Hand cut and sewn locally',
-        'Dyed with our proprietary colors',
-        'Pre-washed & pre-shrunk',
-        'Ultra-soft 100% cotton',
-    ],
-    details:
-        'The 6-Pack includes two black, two white, and two heather gray Basic Tees. Sign up for our subscription service and be the first to get new, exciting colors, like our upcoming "Charcoal Gray" limited release.',
-}
+// const product = {
+//     id: 1,
+//     name: 'Basic Tee 6-Pack',
+//     price: 192,
+//     category: 'Shirts',
+//     quantity: 1,
+//     images: [
+//         {
+//             src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-secondary-product-shot.jpg',
+//         },
+//         {
+//             src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-01.jpg',
+//         },
+//         {
+//             src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-02.jpg',
+//         },
+//         {
+//             src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-featured-product-shot.jpg',
+//         },
+//     ],
+//     colors: [ 'White', 'Gray', 'Black' ],
+//     sizes: [ 'XS', 'S', 'M', 'L', 'XL' ],
+//     //     { name: 'XXS', inStock: false },
+//     //     { name: 'XS', inStock: true },
+//     //     { name: 'S', inStock: true },
+//     //     { name: 'M', inStock: true },
+//     //     { name: 'L', inStock: true },
+//     //     { name: 'XL', inStock: true },
+//     //     { name: '2XL', inStock: true },
+//     //     { name: '3XL', inStock: true },
+//     // ],
+//     description:
+//         'The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: "Black". Need to add an extra pop of color to your outfit? Our white tee has you covered.',
+//     highlights: [
+//         'Hand cut and sewn locally',
+//         'Dyed with our proprietary colors',
+//         'Pre-washed & pre-shrunk',
+//         'Ultra-soft 100% cotton',
+//     ],
+//     details:
+//         'The 6-Pack includes two black, two white, and two heather gray Basic Tees. Sign up for our subscription service and be the first to get new, exciting colors, like our upcoming "Charcoal Gray" limited release.',
+// }
 
 const reviews = { href: '#', average: 4, totalCount: 117 }
 
@@ -65,16 +60,46 @@ function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
 
-export default function Product() {
-    const [selectedColor, setSelectedColor] = useState(product.colors[0])
-    const [selectedSize, setSelectedSize] = useState(product.sizes[2])
-
+export default function Page() {
     const dispatch = useAppDispatch();
 
     const { toast } = useToast()
 
+    const [product, setProduct] = useState<Product | null>(null)
+    const [selectedColor, setSelectedColor] = useState(null)
+    const [selectedSize, setSelectedSize] = useState(null)
+
+    const { id } = useParams()
+    
+    useEffect(() => {
+        fetch(`/api/products/${id}`)
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data)
+                setProduct(data)
+                setSelectedColor(data.colors[0])
+                setSelectedSize(data.sizes[2])
+            })
+    }, [id])
+    
+    if (!product) return <div>Loading...</div>
+
+    const allColors = [
+        { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-200' },
+        { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
+        { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900' },
+        { name: 'Blue', class: 'bg-blue-300', selectedClass: 'ring-blue-600' },
+        { name: 'Green', class: 'bg-green-300', selectedClass: 'ring-green-600' },
+        { name: 'Red', class: 'bg-red-300', selectedClass: 'ring-red-600' },
+      ];
+      
+      const availableColors = product.colors;      
+
+    const allSizes = ['XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'];
+const availableSizes = product.sizes; 
+
     const handleAddToBag = (product: Product) => {
-        dispatch(addProduct(product))
+        dispatch(addProduct({ ...product, quantity: 1 }))
         toast({
             title: "Product added to Bag",
             description: "View bag by clicking on the Bag icon",
@@ -108,8 +133,8 @@ export default function Product() {
 
                         <li>
                             <div className="flex items-center">
-                                <a href={product.category.toLowerCase()} className="mr-2 text-sm font-medium text-gray-700">
-                                    {product.category}
+                                <a href={product.categoryName.toLowerCase()} className="mr-2 text-sm font-medium text-gray-700">
+                                    {product.categoryName}
                                 </a>
                                 <svg
                                     fill="currentColor"
@@ -140,7 +165,7 @@ export default function Product() {
                             height={400}
                             width={300}
                             alt='img-1'
-                            src={product.images[0].src}
+                            src={product.images[0]}
                             className="h-full w-full object-cover object-center"
                         />
                     </div>
@@ -150,7 +175,7 @@ export default function Product() {
                                 height={400}
                                 width={300}
                                 alt='img-2'
-                                src={product.images[1].src}
+                                src={product.images[1]}
                                 className="h-full w-full object-cover object-center"
                             />
                         </div>
@@ -159,7 +184,7 @@ export default function Product() {
                                 height={400}
                                 width={300}
                                 alt='img-3'
-                                src={product.images[2].src}
+                                src={product.images[2]}
                                 className="h-full w-full object-cover object-center"
                             />
                         </div>
@@ -169,7 +194,7 @@ export default function Product() {
                             height={400}
                             width={300}
                             alt='img-4'
-                            src={product.images[3].src}
+                            src={product.images[3]}
                             className="h-full w-full object-cover object-center"
                         />
                     </div>
@@ -215,28 +240,31 @@ export default function Product() {
                                 <h3 className="text-sm font-medium text-gray-900">Color</h3>
 
                                 <fieldset aria-label="Choose a color" className="mt-4">
-                                    <RadioGroup value={selectedColor} onChange={setSelectedColor} className="flex items-center space-x-3">
-                                        {product.colors.map((color) => (
-                                            <Radio
-                                                key={color.name}
-                                                value={color}
-                                                aria-label={color.name}
-                                                className={classNames(
-                                                    color.selectedClass,
-                                                    'relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none data-[checked]:ring-2 data-[focus]:data-[checked]:ring data-[focus]:data-[checked]:ring-offset-1',
-                                                )}
-                                            >
-                                                <span
-                                                    aria-hidden="true"
-                                                    className={classNames(
-                                                        color.class,
-                                                        'h-8 w-8 rounded-full border border-black border-opacity-10',
-                                                    )}
-                                                />
-                                            </Radio>
-                                        ))}
-                                    </RadioGroup>
-                                </fieldset>
+  <RadioGroup value={selectedColor} onChange={setSelectedColor} className="flex items-center space-x-3">
+    {allColors.map((color) => (
+      <Radio
+        key={color.name}
+        value={color.name}
+        aria-label={color.name}
+        disabled={!availableColors.includes(color.name)} // Disable if color not available
+        className={classNames(
+          availableColors.includes(color.name)
+            ? color.selectedClass
+            : 'cursor-not-allowed opacity-30', // Style for unavailable colors
+          'relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none data-[checked]:ring-2 data-[focus]:data-[checked]:ring data-[focus]:data-[checked]:ring-offset-1'
+        )}
+      >
+        <span
+          aria-hidden="true"
+          className={classNames(
+            color.class,
+            'h-8 w-8 rounded-full border border-black border-opacity-10'
+          )}
+        />
+      </Radio>
+    ))}
+  </RadioGroup>
+</fieldset>
                             </div>
 
                             {/* Sizes */}
@@ -249,48 +277,49 @@ export default function Product() {
                                 </div>
 
                                 <fieldset aria-label="Choose a size" className="mt-4">
-                                    <RadioGroup
-                                        value={selectedSize}
-                                        onChange={setSelectedSize}
-                                        className="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-4"
-                                    >
-                                        {product.sizes.map((size) => (
-                                            <Radio
-                                                key={size.name}
-                                                value={size}
-                                                disabled={!size.inStock}
-                                                className={classNames(
-                                                    size.inStock
-                                                        ? 'cursor-pointer bg-white text-gray-900 shadow-sm'
-                                                        : 'cursor-not-allowed bg-gray-50 text-gray-200',
-                                                    'group relative flex items-center justify-center rounded-md border px-4 py-3 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none data-[focus]:ring-2 data-[focus]:ring-indigo-500 sm:flex-1 sm:py-6',
-                                                )}
-                                            >
-                                                <span>{size.name}</span>
-                                                {size.inStock ? (
-                                                    <span
-                                                        aria-hidden="true"
-                                                        className="pointer-events-none absolute -inset-px rounded-md border-2 border-transparent group-data-[focus]:border group-data-[checked]:border-indigo-500"
-                                                    />
-                                                ) : (
-                                                    <span
-                                                        aria-hidden="true"
-                                                        className="pointer-events-none absolute -inset-px rounded-md border-2 border-gray-200"
-                                                    >
-                                                        <svg
-                                                            stroke="currentColor"
-                                                            viewBox="0 0 100 100"
-                                                            preserveAspectRatio="none"
-                                                            className="absolute inset-0 h-full w-full stroke-2 text-gray-200"
-                                                        >
-                                                            <line x1={0} x2={100} y1={100} y2={0} vectorEffect="non-scaling-stroke" />
-                                                        </svg>
-                                                    </span>
-                                                )}
-                                            </Radio>
-                                        ))}
-                                    </RadioGroup>
-                                </fieldset>
+  <RadioGroup
+    value={selectedSize}
+    onChange={setSelectedSize}
+    className="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-4"
+  >
+    {allSizes.map((size) => (
+      <Radio
+        key={size}
+        value={size}
+        disabled={!availableSizes.includes(size)} // Disable if not available
+        className={classNames(
+          availableSizes.includes(size)
+            ? 'cursor-pointer bg-white text-gray-900 shadow-sm'
+            : 'cursor-not-allowed bg-gray-50 text-gray-200',
+          'group relative flex items-center justify-center rounded-md border px-4 py-3 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none data-[focus]:ring-2 data-[focus]:ring-indigo-500 sm:flex-1 sm:py-6'
+        )}
+      >
+        <span>{size}</span>
+        {availableSizes.includes(size) ? (
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute -inset-px rounded-md border-2 border-transparent group-data-[focus]:border group-data-[checked]:border-indigo-500"
+          />
+        ) : (
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute -inset-px rounded-md border-2 border-gray-200"
+          >
+            <svg
+              stroke="currentColor"
+              viewBox="0 0 100 100"
+              preserveAspectRatio="none"
+              className="absolute inset-0 h-full w-full stroke-2 text-gray-200"
+            >
+              <line x1={0} x2={100} y1={100} y2={0} vectorEffect="non-scaling-stroke" />
+            </svg>
+          </span>
+        )}
+      </Radio>
+    ))}
+  </RadioGroup>
+</fieldset>
+
                             </div>
 
                             <button

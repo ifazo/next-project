@@ -1,4 +1,4 @@
-import { deleteUser, getUser, updateUser } from "@/data/user";
+import prisma from "@/lib/prisma";
 
 export async function GET(
   request: Request,
@@ -7,7 +7,11 @@ export async function GET(
   try {
     const id = params.id;
 
-    const product = await getUser(id);
+    const product = await prisma.user.findUnique({
+      where: {
+        id: id,
+      },
+    });
     return new Response(JSON.stringify(product), {
       headers: { "content-type": "application/json" },
     });
@@ -25,7 +29,12 @@ export async function PATCH(
   try {
     const id = params.id;
     const body = await request.json();
-    const product = await updateUser(id, body);
+    const product = await prisma.user.update({
+      where: {
+        id: id,
+      },
+      data: body,
+    });
     return new Response(JSON.stringify(product), {
       headers: { "content-type": "application/json" },
     });
@@ -42,7 +51,11 @@ export async function DELETE(
 ) {
   try {
     const id = params.id;
-    const product = await deleteUser(id);
+    const product = await prisma.user.delete({
+      where: {
+        id: id,
+      },
+    });
     return new Response(JSON.stringify(product), {
       headers: { "content-type": "application/json" },
     });

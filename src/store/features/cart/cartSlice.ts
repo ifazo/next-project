@@ -1,4 +1,8 @@
-import { Product } from "@/types";
+import { Product as PrismaProduct } from "@prisma/client";
+
+interface Product extends PrismaProduct {
+  quantity: number;
+}
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 interface ICartState {
@@ -15,6 +19,7 @@ const cartSlice = createSlice({
   reducers: {
     addProduct: (state, action: PayloadAction<Product>) => {
       const existingProduct = state.cart.find((product) => product.id === action.payload.id);
+      
       if (existingProduct) {
         existingProduct.quantity += 1;
       } else {

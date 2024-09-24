@@ -1,11 +1,15 @@
-import { createReview, getReviews } from "@/data/review";
+import prisma from "@/lib/prisma";
 import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = request.nextUrl;
     const id = searchParams.get("id") || "";
-    const reviews = await getReviews({ id });
+    const reviews = await prisma.review.findMany({
+      where: {
+        productId: id,
+      },
+    });
     return new Response(JSON.stringify(reviews), {
       headers: { "content-type": "application/json" },
     });
@@ -20,7 +24,9 @@ export async function POST(request: Request) {
     if (!data) {
       return new Response("Request body is required", { status: 400 });
     }
-    const review = await createReview(data);
+    const review = await prisma.review.create({
+      data,
+    });
     return new Response(JSON.stringify(review), {
       headers: { "content-type": "application/json" },
     });

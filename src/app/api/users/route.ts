@@ -1,24 +1,33 @@
-import { getUsers } from "@/data/user";
+import prisma from "@/lib/prisma";
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
-    // const { searchParams } = new URL(request.url);
-    // const role = searchParams.get("role") as UserRole;
-
-    // if (role) {
-    //   const user = await getUsersByRole(role);
-    //   return new Response(JSON.stringify(user), {
-    //     headers: { "content-type": "application/json" },
-    //   });
-    // }
-
-    const user = await getUsers();
-    const data = JSON.stringify(user);
-
-    return new Response(data, {
+    const users = await prisma.user.findMany();
+    return new Response(JSON.stringify(users), {
       headers: { "content-type": "application/json" },
     });
   } catch (error) {
-    console.log(error);
+    return new Response(JSON.stringify(error), {
+      headers: { "content-type": "application/json" },
+    });
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const data = await request.json();
+    if (!data) {
+      return new Response("Request body is required", { status: 400 });
+    }
+    const user = await prisma.user.create({
+      data,
+    });
+    return new Response(JSON.stringify(user), {
+      headers: { "content-type": "application/json" },
+    });
+  } catch (error) {
+    return new Response(JSON.stringify(error), {
+      headers: { "content-type": "application/json" },
+    });
   }
 }

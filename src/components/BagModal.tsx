@@ -1,10 +1,14 @@
 import { removeProduct } from '@/store/features/cart/cartSlice';
 import { useAppDispatch } from '@/store/hook';
-import { Product } from '@/types';
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import Link from 'next/link';
+import { Product as PrismaProduct } from "@prisma/client";
+
+interface Product extends PrismaProduct {
+  quantity: number;
+}
 
 interface BagModalProps {
     open: boolean;
@@ -66,7 +70,7 @@ export default function BagModal({ open, setOpen, products }: BagModalProps) {
                                                                 <Image
                                                                     height={96}
                                                                     width={96}
-                                                                    src={product.images[3].src}
+                                                                    src={product.images[3]}
                                                                     alt='img'
                                                                     className="h-full w-full object-cover object-center"
                                                                 />
@@ -80,7 +84,7 @@ export default function BagModal({ open, setOpen, products }: BagModalProps) {
                                                                         </h3>
                                                                         <p className="ml-4">${product.price}</p>
                                                                     </div>
-                                                                    <p className="mt-1 text-sm text-gray-500">{product.category}</p>
+                                                                    <p className="mt-1 text-sm text-gray-500">{product.categoryName}</p>
                                                                 </div>
                                                                 <div className="flex flex-1 items-end justify-between text-sm">
                                                                     <p className="text-gray-500">Qty {product.quantity}</p>

@@ -12,14 +12,14 @@ CREATE TABLE "User" (
 CREATE TABLE "Product" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "price" INTEGER NOT NULL,
-    "stock" INTEGER NOT NULL,
+    "price" DOUBLE PRECISION NOT NULL,
     "category" TEXT NOT NULL,
-    "images" JSONB NOT NULL,
-    "colors" JSONB NOT NULL,
-    "sizes" JSONB NOT NULL,
+    "quantity" INTEGER NOT NULL,
+    "images" TEXT[],
+    "colors" TEXT[],
+    "sizes" TEXT[],
     "description" TEXT NOT NULL,
-    "highlights" JSONB NOT NULL,
+    "highlights" TEXT[],
     "details" TEXT NOT NULL,
 
     CONSTRAINT "Product_pkey" PRIMARY KEY ("id")

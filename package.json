@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "generate": "npx drizzle-kit generate",
-    "migrate": "npx drizzle-kit migrate"
+    "format": "prettier --write .",
+    "migrate": "npx prisma migrate dev"
   },
   "dependencies": {
     "@headlessui/react": "^2.1.8",
