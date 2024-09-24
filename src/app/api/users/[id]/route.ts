@@ -1,4 +1,4 @@
-import { deleteProduct, getProduct, updateProduct } from "@/data/product";
+import { deleteUser, getUser, updateUser } from "@/data/user";
 
 export async function GET(
   request: Request,
@@ -6,8 +6,8 @@ export async function GET(
 ) {
   try {
     const id = params.id;
-    console.log(id);
-    const product = await getProduct(id);
+
+    const product = await getUser(id);
     return new Response(JSON.stringify(product), {
       headers: { "content-type": "application/json" },
     });
@@ -25,7 +25,7 @@ export async function PATCH(
   try {
     const id = params.id;
     const body = await request.json();
-    const product = await updateProduct(id, body);
+    const product = await updateUser(id, body);
     return new Response(JSON.stringify(product), {
       headers: { "content-type": "application/json" },
     });
@@ -42,7 +42,7 @@ export async function DELETE(
 ) {
   try {
     const id = params.id;
-    const product = await deleteProduct(id);
+    const product = await deleteUser(id);
     return new Response(JSON.stringify(product), {
       headers: { "content-type": "application/json" },
     });
