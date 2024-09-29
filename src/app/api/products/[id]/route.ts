@@ -6,7 +6,7 @@ export async function GET(
 ) {
   try {
     const id = params.id;
-    const product = await prisma.product.findUnique({ where: { id } })
+    const product = await prisma.product.findUnique({ where: { id } });
     return new Response(JSON.stringify(product), {
       headers: { "content-type": "application/json" },
     });

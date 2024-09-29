@@ -4,7 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Providers } from "./providers";
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from "@/components/ui/toaster";
 
 const playfairDisplay = Playfair_Display({
   subsets: ["latin"],
@@ -24,14 +24,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Providers>
-      <head>
-        <link rel="icon" href="/img/favicon.png" type="image/png" sizes="any" />
-      </head>
-      <body className={`${playfairDisplay.className} antialiased`}>
-        <Navbar />
+        <head>
+          <link
+            rel="icon"
+            href="/img/favicon.png"
+            type="image/png"
+            sizes="any"
+          />
+        </head>
+        <body className={`${playfairDisplay.className} antialiased`}>
+          <Navbar />
           <main>{children}</main>
           <Toaster />
-        <Footer />
+          <Footer />
         </body>
       </Providers>
     </html>

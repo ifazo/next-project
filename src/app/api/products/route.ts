@@ -11,9 +11,12 @@ export async function POST(request: Request) {
       headers: { "content-type": "application/json" },
     });
   } catch (error) {
-    return new Response(JSON.stringify({ error: "Error creating product", details: error }), {
-      headers: { "content-type": "application/json" },
-    });
+    return new Response(
+      JSON.stringify({ error: "Error creating product", details: error }),
+      {
+        headers: { "content-type": "application/json" },
+      },
+    );
   }
 }
 
@@ -32,10 +35,7 @@ export async function GET(request: NextRequest) {
     if (q) {
       products = await prisma.product.findMany({
         where: {
-          OR: [
-            { name: { contains: q } },
-            { description: { contains: q } }
-          ]
+          OR: [{ name: { contains: q } }, { description: { contains: q } }],
         },
         take: limit,
         skip: skip,
@@ -76,10 +76,12 @@ export async function GET(request: NextRequest) {
     return new Response(JSON.stringify(products), {
       headers: { "content-type": "application/json" },
     });
-
   } catch (error) {
-    return new Response(JSON.stringify({ error: "Error fetching products", details: error }), {
-      headers: { "content-type": "application/json" },
-    });
+    return new Response(
+      JSON.stringify({ error: "Error fetching products", details: error }),
+      {
+        headers: { "content-type": "application/json" },
+      },
+    );
   }
 }

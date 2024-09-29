@@ -1,62 +1,145 @@
-import { Package2, Twitter, Github, Linkedin } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
+import Image from "next/image";
+
+const footerNavigation = {
+  products: [
+    { name: "Bags", href: "#" },
+    { name: "Tees", href: "#" },
+    { name: "Objects", href: "#" },
+    { name: "Home Goods", href: "#" },
+    { name: "Accessories", href: "#" },
+  ],
+  company: [
+    { name: "Who we are", href: "#" },
+    { name: "Sustainability", href: "#" },
+    { name: "Press", href: "#" },
+    { name: "Careers", href: "#" },
+    { name: "Terms & Conditions", href: "#" },
+    { name: "Privacy", href: "#" },
+  ],
+  customerService: [
+    { name: "Contact", href: "#" },
+    { name: "Shipping", href: "#" },
+    { name: "Returns", href: "#" },
+    { name: "Warranty", href: "#" },
+    { name: "Secure Payments", href: "#" },
+    { name: "FAQ", href: "#" },
+    { name: "Find a store", href: "#" },
+  ],
+};
 
 export default function Footer() {
-    return (
-        <footer className="border-t bg-background py-10">
-            <div className="container mx-auto flex flex-col items-center justify-between space-y-6 md:flex-row md:space-y-0 md:space-x-8">
-                {/* Logo and description */}
-                <div className="flex flex-col items-center space-y-4 md:flex-row md:space-y-0 md:space-x-4">
-                    <Link href="#" className="flex items-center gap-2">
-                        <Package2 className="h-6 w-6" />
-                        <span className="text-lg font-semibold">Acme Inc</span>
-                    </Link>
-                    <p className="text-sm text-muted-foreground">
-                        Beautifully designed components built with Radix UI and Tailwind CSS.
-                    </p>
-                </div>
-
-                {/* Navigation Links */}
-                <nav className="flex flex-col items-center space-y-4 text-center md:flex-row md:space-y-0 md:space-x-6">
-                    <Link href="/about" className="text-muted-foreground hover:text-foreground">
-                        About Us
-                    </Link>
-                    <Link href="/contact" className="text-muted-foreground hover:text-foreground">
-                        Contact
-                    </Link>
-                    <Link href="/privacy" className="text-muted-foreground hover:text-foreground">
-                        Privacy Policy
-                    </Link>
-                    <Link href="/terms" className="text-muted-foreground hover:text-foreground">
-                        Terms of Service
-                    </Link>
-                </nav>
-
-                {/* Social Media Icons */}
-                <div className="flex space-x-4">
-                    <Button variant="ghost" size="icon" asChild>
-                        <Link href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-                            <Twitter className="h-5 w-5 text-muted-foreground hover:text-blue-500" />
-                        </Link>
-                    </Button>
-                    <Button variant="ghost" size="icon" asChild>
-                        <Link href="https://github.com" target="_blank" rel="noopener noreferrer">
-                            <Github className="h-5 w-5 text-muted-foreground hover:text-gray-800" />
-                        </Link>
-                    </Button>
-                    <Button variant="ghost" size="icon" asChild>
-                        <Link href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
-                            <Linkedin className="h-5 w-5 text-muted-foreground hover:text-blue-700" />
-                        </Link>
-                    </Button>
-                </div>
+  return (
+    <footer aria-labelledby="footer-heading" className="bg-gray-50">
+      <h2 id="footer-heading" className="sr-only">
+        Footer
+      </h2>
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="border-t border-gray-200 py-20">
+          <div className="grid grid-cols-1 md:grid-flow-col md:auto-rows-min md:grid-cols-12 md:gap-x-8 md:gap-y-16">
+            {/* Image section */}
+            <div className="col-span-1 md:col-span-2 lg:col-start-1 lg:row-start-1">
+              <Image
+                height={32}
+                width={32}
+                alt="logo"
+                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                className="h-8 w-auto"
+              />
             </div>
 
-            {/* Copyright Text */}
-            <div className="mt-6 text-center text-sm text-muted-foreground">
-                © {new Date().getFullYear()} Acme Inc. All rights reserved.
+            {/* Sitemap sections */}
+            <div className="col-span-6 mt-10 grid grid-cols-2 gap-8 sm:grid-cols-3 md:col-span-8 md:col-start-3 md:row-start-1 md:mt-0 lg:col-span-6 lg:col-start-2">
+              <div className="grid grid-cols-1 gap-y-12 sm:col-span-2 sm:grid-cols-2 sm:gap-x-8">
+                <div>
+                  <h3 className="text-sm font-medium text-gray-900">
+                    Products
+                  </h3>
+                  <ul role="list" className="mt-6 space-y-6">
+                    {footerNavigation.products.map((item) => (
+                      <li key={item.name} className="text-sm">
+                        <a
+                          href={item.href}
+                          className="text-gray-500 hover:text-gray-600"
+                        >
+                          {item.name}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="text-sm font-medium text-gray-900">Company</h3>
+                  <ul role="list" className="mt-6 space-y-6">
+                    {footerNavigation.company.map((item) => (
+                      <li key={item.name} className="text-sm">
+                        <a
+                          href={item.href}
+                          className="text-gray-500 hover:text-gray-600"
+                        >
+                          {item.name}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-gray-900">
+                  Customer Service
+                </h3>
+                <ul role="list" className="mt-6 space-y-6">
+                  {footerNavigation.customerService.map((item) => (
+                    <li key={item.name} className="text-sm">
+                      <a
+                        href={item.href}
+                        className="text-gray-500 hover:text-gray-600"
+                      >
+                        {item.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
-        </footer>
-    )
+
+            {/* Newsletter section */}
+            <div className="mt-12 md:col-span-8 md:col-start-3 md:row-start-2 md:mt-0 lg:col-span-4 lg:col-start-9 lg:row-start-1">
+              <h3 className="text-sm font-medium text-gray-900">
+                Sign up for our newsletter
+              </h3>
+              <p className="mt-6 text-sm text-gray-500">
+                The latest deals and savings, sent to your inbox weekly.
+              </p>
+              <form className="mt-2 flex sm:max-w-md">
+                <label htmlFor="email-address" className="sr-only">
+                  Email address
+                </label>
+                <input
+                  id="email-address"
+                  type="text"
+                  required
+                  autoComplete="email"
+                  className="w-full min-w-0 appearance-none rounded-md border border-gray-300 bg-white px-4 py-2 text-base text-gray-900 placeholder-gray-500 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                />
+                <div className="ml-4 flex-shrink-0">
+                  <button
+                    type="submit"
+                    className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  >
+                    Sign up
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div className="border-t border-gray-100 py-10 text-center">
+          <p className="text-sm text-gray-500">
+            &copy; 2021 Your Company, Inc. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
 }
