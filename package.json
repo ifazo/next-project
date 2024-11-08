@@ -8,8 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write .",
-    "migrate": "npx prisma migrate dev",
-    "vercel-build": "npm install --legacy-peer-deps && next build"
+    "migrate": "npx prisma migrate dev"
   },
   "dependencies": {
     "@headlessui/react": "^2.1.8",
@@ -23,7 +22,7 @@
     "@radix-ui/react-navigation-menu": "^1.2.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-tabs": "^1.1.0",
-    "@radix-ui/react-toast": "^1.2.1",
+    "@radix-ui/react-toast": "^1.2.2",
     "@radix-ui/react-tooltip": "^1.1.2",
     "@reduxjs/toolkit": "^2.2.7",
     "@supabase/ssr": "^0.5.1",
@@ -37,8 +36,8 @@
     "lucide-react": "^0.441.0",
     "next": "^15.0.3",
     "prisma": "^5.19.1",
-    "react": "^19.0.0-rc-5c56b873-20241107",
-    "react-dom": "^19.0.0-rc-5c56b873-20241107",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-hook-form": "^7.53.0",
     "react-redux": "^9.1.2",
     "swiper": "^11.1.14",
