@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { Product } from "@prisma/client";
 import { useParams } from "next/navigation";
+import Link from "next/link";
 
 const reviews = { href: "/", average: 4, totalCount: 117 };
 
@@ -74,9 +75,9 @@ export default function Page() {
           >
             <li>
               <div className="flex items-center">
-                <a href="/" className="mr-2 text-sm font-medium text-gray-900">
+                <Link href="/" className="mr-2 text-sm font-medium text-gray-900">
                   Home
-                </a>
+                </Link>
                 <svg
                   fill="currentColor"
                   width={16}

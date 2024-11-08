@@ -113,7 +113,7 @@ export default function Navbar() {
   // const [isBagOpen, setIsBagOpen] = useState(false)
 
   const [user, setUser] = useState<User | null>(null);
-  console.log(user);
+  // console.log(user);
   // const products = useAppSelector((state) => state.cart.cart)
   // const totalProducts = products.reduce((total) => total + 1, 0)
 
@@ -205,13 +205,15 @@ export default function Navbar() {
                       {category.featured.map((item) => (
                         <div key={item.name} className="group relative">
                           <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-md bg-gray-100 group-hover:opacity-75">
-                            <img
+                            <Image
+                              height={200}
+                              width={200}
                               alt={item.imageAlt}
                               src={item.imageSrc}
                               className="object-cover object-center"
                             />
                           </div>
-                          <a
+                          <Link
                             href={item.href}
                             className="mt-6 block text-sm font-medium text-gray-900"
                           >
@@ -220,7 +222,7 @@ export default function Navbar() {
                               className="absolute inset-0 z-10"
                             />
                             {item.name}
-                          </a>
+                          </Link>
                           <p
                             aria-hidden="true"
                             className="mt-1 text-sm text-gray-500"
@@ -238,12 +240,12 @@ export default function Navbar() {
             <div className="space-y-6 border-t border-gray-200 px-4 py-6">
               {navigation.pages.map((page) => (
                 <div key={page.name} className="flow-root">
-                  <a
+                  <Link
                     href={page.href}
                     className="-m-2 block p-2 font-medium text-gray-900"
                   >
                     {page.name}
-                  </a>
+                  </Link>
                 </div>
               ))}
             </div>
@@ -315,13 +317,15 @@ export default function Navbar() {
                                       className="group relative"
                                     >
                                       <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-md bg-gray-100 group-hover:opacity-75">
-                                        <img
+                                        <Image
+                                          height={200}
+                                          width={200}
                                           alt={item.imageAlt}
                                           src={item.imageSrc}
                                           className="object-cover object-center"
                                         />
                                       </div>
-                                      <a
+                                      <Link
                                         href={item.href}
                                         className="mt-4 block font-medium text-gray-900"
                                       >
@@ -330,7 +334,7 @@ export default function Navbar() {
                                           className="absolute inset-0 z-10"
                                         />
                                         {item.name}
-                                      </a>
+                                      </Link>
                                       <p aria-hidden="true" className="mt-1">
                                         Shop now
                                       </p>
@@ -368,7 +372,7 @@ export default function Navbar() {
                   </button>
 
                   {/* Search */}
-                  <a
+                  <Link
                     href="#"
                     className="ml-2 p-2 text-gray-400 hover:text-gray-500"
                   >
@@ -377,7 +381,7 @@ export default function Navbar() {
                       aria-hidden="true"
                       className="h-6 w-6"
                     />
-                  </a>
+                  </Link>
                 </div>
 
                 {/* Logo (lg-) */}
@@ -393,12 +397,12 @@ export default function Navbar() {
                 </Link>
                 {!user ? (
                   <div className="flex flex-1 items-center justify-end">
-                    <a
+                    <Link
                       href="#"
                       className="hidden text-sm font-medium text-gray-700 hover:text-gray-800 lg:block"
                     >
                       Search
-                    </a>
+                    </Link>
                     <div className="flex items-center lg:ml-8">
                       {/* Sign In */}
                       <Link
@@ -421,12 +425,12 @@ export default function Navbar() {
                   </div>
                 ) : (
                   <div className="flex flex-1 items-center justify-end">
-                    <a
+                    <Link
                       href="#"
                       className="hidden text-sm font-medium text-gray-700 hover:text-gray-800 lg:block"
                     >
                       Search
-                    </a>
+                    </Link>
                     <div className="flex items-center lg:ml-8">
                       {/* Profile */}
                       <Menu
@@ -471,12 +475,12 @@ export default function Navbar() {
                               </Link>
                             </MenuItem>
                             <MenuItem>
-                              <a
+                              <Link
                                 href="#"
                                 className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                               >
                                 Settings
-                              </a>
+                              </Link>
                             </MenuItem>
                           </div>
                           <div className="py-1">

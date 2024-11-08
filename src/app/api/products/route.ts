@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
     const q = searchParams.get("q") || "";
-    const limit = parseInt(searchParams.get("limit") || "10");
+    const limit = parseInt(searchParams.get("limit") || "12");
     const skip = parseInt(searchParams.get("skip") || "0");
     const sort = searchParams.get("sort") || "asc";
     const category = searchParams.get("category") || "";

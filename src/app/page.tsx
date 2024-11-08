@@ -15,112 +15,10 @@
 */
 "use client";
 
-import { Fragment, useState } from "react";
-import {
-  Dialog,
-  DialogBackdrop,
-  DialogPanel,
-  Popover,
-  PopoverButton,
-  PopoverGroup,
-  PopoverPanel,
-  Tab,
-  TabGroup,
-  TabList,
-  TabPanel,
-  TabPanels,
-} from "@headlessui/react";
-import {
-  Bars3Icon,
-  MagnifyingGlassIcon,
-  QuestionMarkCircleIcon,
-  ShoppingBagIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
-import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import Image from "next/image";
 
-const currencies = ["CAD", "USD", "AUD", "EUR", "GBP"];
-const navigation = {
-  categories: [
-    {
-      name: "Women",
-      featured: [
-        {
-          name: "New Arrivals",
-          href: "#",
-          imageSrc:
-            "https://tailwindui.com/img/ecommerce-images/mega-menu-category-01.jpg",
-          imageAlt:
-            "Models sitting back to back, wearing Basic Tee in black and bone.",
-        },
-        {
-          name: "Basic Tees",
-          href: "#",
-          imageSrc:
-            "https://tailwindui.com/img/ecommerce-images/mega-menu-category-02.jpg",
-          imageAlt:
-            "Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.",
-        },
-        {
-          name: "Accessories",
-          href: "#",
-          imageSrc:
-            "https://tailwindui.com/img/ecommerce-images/mega-menu-category-03.jpg",
-          imageAlt:
-            "Model wearing minimalist watch with black wristband and white watch face.",
-        },
-        {
-          name: "Carry",
-          href: "#",
-          imageSrc:
-            "https://tailwindui.com/img/ecommerce-images/mega-menu-category-04.jpg",
-          imageAlt:
-            "Model opening tan leather long wallet with credit card pockets and cash pouch.",
-        },
-      ],
-    },
-    {
-      name: "Men",
-      featured: [
-        {
-          name: "New Arrivals",
-          href: "#",
-          imageSrc:
-            "https://tailwindui.com/img/ecommerce-images/mega-menu-01-men-category-01.jpg",
-          imageAlt:
-            "Hats and sweaters on wood shelves next to various colors of t-shirts on hangers.",
-        },
-        {
-          name: "Basic Tees",
-          href: "#",
-          imageSrc:
-            "https://tailwindui.com/img/ecommerce-images/mega-menu-01-men-category-02.jpg",
-          imageAlt: "Model wearing light heather gray t-shirt.",
-        },
-        {
-          name: "Accessories",
-          href: "#",
-          imageSrc:
-            "https://tailwindui.com/img/ecommerce-images/mega-menu-01-men-category-03.jpg",
-          imageAlt:
-            "Grey 6-panel baseball hat with black brim, black mountain graphic on front, and light heather gray body.",
-        },
-        {
-          name: "Carry",
-          href: "#",
-          imageSrc:
-            "https://tailwindui.com/img/ecommerce-images/mega-menu-01-men-category-04.jpg",
-          imageAlt:
-            "Model putting folded cash into slim card holder olive leather wallet with hand stitching.",
-        },
-      ],
-    },
-  ],
-  pages: [
-    { name: "Company", href: "#" },
-    { name: "Stores", href: "#" },
-  ],
-};
+// import { useState } from "react";
+
 const collections = [
   {
     name: "Women's",
@@ -190,7 +88,7 @@ const perks = [
 ];
 
 export default function Page() {
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
 
   return (
     <div className="bg-white">
@@ -204,7 +102,9 @@ export default function Page() {
           >
             <div className="relative w-full flex-1 bg-gray-800">
               <div className="absolute inset-0 overflow-hidden">
-                <img
+                <Image
+                  height={1100}
+                  width={1400}
                   alt=""
                   src="https://tailwindui.com/img/ecommerce-images/home-page-04-hero-full-width.jpg"
                   className="h-full w-full object-cover object-center"
@@ -223,7 +123,9 @@ export default function Page() {
             >
               <div className="relative w-full flex-1 bg-gray-800">
                 <div className="absolute inset-0 overflow-hidden">
-                  <img
+                  <Image
+                    height={1100}
+                    width={1400}
                     alt=""
                     src="https://tailwindui.com/img/ecommerce-images/home-page-04-hero-full-width.jpg"
                     className="h-full w-full object-cover object-center"
@@ -267,7 +169,9 @@ export default function Page() {
                       className="absolute inset-0 overflow-hidden rounded-lg"
                     >
                       <div className="absolute inset-0 overflow-hidden group-hover:opacity-75">
-                        <img
+                        <Image
+                          height={1100}
+                          width={1400}
                           alt={collection.imageAlt}
                           src={collection.imageSrc}
                           className="h-full w-full object-cover object-center"
@@ -317,7 +221,9 @@ export default function Page() {
               {trendingProducts.map((product) => (
                 <div key={product.id} className="group relative">
                   <div className="h-56 w-full overflow-hidden rounded-md group-hover:opacity-75 lg:h-72 xl:h-80">
-                    <img
+                    <Image
+                      height={1100}
+                      width={1400}
                       alt={product.imageAlt}
                       src={product.imageSrc}
                       className="h-full w-full object-cover object-center"
@@ -366,7 +272,9 @@ export default function Page() {
                 >
                   <div className="md:flex-shrink-0">
                     <div className="flow-root">
-                      <img
+                      <Image
+                        height={80}
+                        width={80}
                         alt=""
                         src={perk.imageUrl}
                         className="-my-1 mx-auto h-24 w-auto"

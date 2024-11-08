@@ -31,10 +31,10 @@ const sortOptions = [
   { name: "Price: High to Low", href: "#", current: false },
 ];
 const subCategories = [
-  { name: "Shirt", href: "#" },
-  { name: "Pants", href: "#" },
-  { name: "Shoes", href: "#" },
-  { name: "Accessories", href: "#" },
+  { name: "Shirt", href: "shirt" },
+  { name: "Pants", href: "pants" },
+  { name: "Shoes", href: "shoes" },
+  { name: "Accessories", href: "accessories" },
 ];
 const filters = [
   {
@@ -118,7 +118,7 @@ export default function Products() {
                 <ul role="list" className="px-2 py-3 font-medium text-gray-900">
                   {subCategories.map((category) => (
                     <li key={category.name}>
-                      <a href={category.href} className="block px-2 py-3">
+                      <a href={`/products?categories=${category.href}`} className="block px-2 py-3">
                         {category.name}
                       </a>
                     </li>
@@ -252,7 +252,7 @@ export default function Products() {
                 >
                   {subCategories.map((category) => (
                     <li key={category.name}>
-                      <a href={category.href}>{category.name}</a>
+                      <a href={`/products?categories=${category.href}`}>{category.name}</a>
                     </li>
                   ))}
                 </ul>
