@@ -27,6 +27,10 @@ const routes = [
     label: "Products",
   },
   {
+    href: "/dashboard",
+    label: "Dashboard",
+  },
+  {
     href: "/sign-in",
     label: "Sign In",
   },
