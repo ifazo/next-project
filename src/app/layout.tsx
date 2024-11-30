@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "./providers";
 import { ThemeProvider } from "@/components/theme-provider"
 import { Navbar } from "@/components/navbar";
+import { Toaster } from "@/components/ui/toaster";
 
 const playfairDisplay = Playfair_Display({
   subsets: ["latin"],
@@ -29,6 +30,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Navbar />
           <main>{children}</main>
+          <Toaster />
         </ThemeProvider>
         </body>
       </Providers>

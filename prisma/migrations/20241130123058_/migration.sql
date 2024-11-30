@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "Role" AS ENUM ('user', 'admin', 'super_admin');
+CREATE TYPE "Role" AS ENUM ('buyer', 'seller', 'admin');
 
 -- CreateTable
 CREATE TABLE "users" (
@@ -8,7 +8,7 @@ CREATE TABLE "users" (
     "picture" TEXT,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "role" "Role" NOT NULL DEFAULT 'user',
+    "role" "Role" NOT NULL DEFAULT 'buyer',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -32,7 +32,7 @@ CREATE TABLE "categories" (
 CREATE TABLE "products" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
-    "categoryName" TEXT NOT NULL,
+    "category_name" TEXT NOT NULL,
     "price" DOUBLE PRECISION NOT NULL,
     "images" TEXT[],
     "description" TEXT NOT NULL,
@@ -49,8 +49,8 @@ CREATE TABLE "reviews" (
     "id" TEXT NOT NULL,
     "rating" INTEGER NOT NULL,
     "comment" TEXT NOT NULL,
-    "productId" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
+    "product_id" TEXT NOT NULL,
+    "user_id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -67,10 +67,10 @@ CREATE UNIQUE INDEX "categories_name_key" ON "categories"("name");
 CREATE UNIQUE INDEX "categories_slug_key" ON "categories"("slug");
 
 -- AddForeignKey
-ALTER TABLE "products" ADD CONSTRAINT "products_categoryName_fkey" FOREIGN KEY ("categoryName") REFERENCES "categories"("name") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "products" ADD CONSTRAINT "products_category_name_fkey" FOREIGN KEY ("category_name") REFERENCES "categories"("name") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "reviews" ADD CONSTRAINT "reviews_productId_fkey" FOREIGN KEY ("productId") REFERENCES "products"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+ALTER TABLE "reviews" ADD CONSTRAINT "reviews_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "products"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "reviews" ADD CONSTRAINT "reviews_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+ALTER TABLE "reviews" ADD CONSTRAINT "reviews_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
