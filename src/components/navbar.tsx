@@ -3,8 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ChevronRight, Menu } from "lucide-react";
-
+import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
@@ -16,6 +15,8 @@ import {
 } from "@/components/ui/navigation-menu";
 import { ModeToggle } from "@/components/mode-toggle";
 import { cn } from "@/lib/utils";
+import supabase from "@/lib/supabase";
+import { useToast } from "@/hooks/use-toast";
 
 const routes = [
   {
@@ -27,22 +28,42 @@ const routes = [
     label: "Products",
   },
   {
+    href: "/store",
+    label: "Stores",
+  },
+  {
     href: "/dashboard",
     label: "Dashboard",
-  },
-  {
-    href: "/sign-in",
-    label: "Sign In",
-  },
-  {
-    href: "/sign-up",
-    label: "Sign Up",
   },
 ];
 
 export function Navbar() {
   const pathname = usePathname();
+  const { toast } = useToast();
   const [isOpen, setIsOpen] = React.useState(false);
+  const [user, setUser] = React.useState<string | undefined>(undefined);
+
+  React.useEffect(() => {
+    const fetchUser = async () => {
+      const { data, error } = await supabase.auth.getUser();
+      if (error) {
+        console.error("Error fetching user:", error.message);
+      } else {
+        setUser(data.user.email);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    setUser(undefined);
+    toast({
+      title: "Success",
+      description: "Signed out",
+    });
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -105,9 +126,15 @@ export function Navbar() {
           <div className="w-full flex-1 md:w-auto md:flex-none">
             <ModeToggle />
           </div>
-          <Button variant="outline" size="icon">
-            <ChevronRight />
-          </Button>
+          {user ? (
+              <Button onClick={handleSignOut} variant="outline">
+                Sign out
+              </Button>
+          ) : (
+            <Link href="/sign-in">
+              <Button variant="outline">Sign in</Button>
+            </Link>
+          )}
         </div>
       </div>
     </header>

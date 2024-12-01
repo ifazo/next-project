@@ -16,6 +16,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import supabase from "@/lib/supabase";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 type Inputs = {
   email: string;
@@ -34,11 +35,11 @@ export default function SignIn() {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const { email, password } = data;
     
-    const { data: user, error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
-    console.log(user);
+    
     if (error) {
       toast({
         variant: "destructive",
@@ -157,9 +158,9 @@ export default function SignIn() {
         </CardContent>
         <CardFooter>
           Don&apos;t have an account?{" "}
-          <a href="/sign-up" className="text-primary">
+          <Link href="/sign-up" className="text-primary mx-2">
             Sign up
-          </a>
+          </Link>
         </CardFooter>
       </Card>
     </div>

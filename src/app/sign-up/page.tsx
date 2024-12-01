@@ -9,17 +9,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Icons } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useToast } from "@/hooks/use-toast";
 import supabase from "@/lib/supabase";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 type Inputs = {
   name: string;
-  picture: string;
+  role: "buyer" | "seller";
   email: string;
   password: string;
 };
@@ -35,12 +35,13 @@ export default function SignUp() {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    const { email, password } = data;
-    
+    const { name, role, email, password } = data;
+
     const { error } = await supabase.auth.signUp({
       email,
       password,
     });
+
     if (error) {
       toast({
         variant: "destructive",
@@ -48,57 +49,32 @@ export default function SignUp() {
         description: error.message,
       });
     } else {
-      toast({
-        title: "Success",
-        description: `Sign up with ${email}`,
+      const response = await fetch("/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, role, email, password }),
       });
-      router.push("/");
+      const result = await response.json();
+
+      if (!result) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Failed to create user",
+        });
+      } else {
+        toast({
+          title: "Success",
+          description: `Sign up with ${email}`,
+        });
+        router.push("/");
+      }
     }
   };
 
-  console.log(watch("password")); // watch input value by passing the name of it
-
-  const handleGoogleSignIn = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: "/",
-      },
-    });
-    if (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error.message,
-      });
-    } else {
-      toast({
-        title: "Success",
-        description: "Sign up with Google",
-      });
-    }
-  };
-
-  const handleGitHubSignIn = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "github",
-      options: {
-        redirectTo: "/",
-      },
-    });
-    if (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error.message,
-      });
-    } else {
-      toast({
-        title: "Success",
-        description: "Sign up with GitHub",
-      });
-    }
-  };
+  const selectedRole = watch("role");
 
   return (
     <div className="flex h-screen w-full items-center justify-center px-4">
@@ -111,22 +87,52 @@ export default function SignUp() {
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="grid grid-cols-2 gap-6">
-            <Button onClick={handleGitHubSignIn} variant="outline">
-              <Icons.gitHub className="mr-2 h-4 w-4" />
-              Github
-            </Button>
-            <Button onClick={handleGoogleSignIn} variant="outline">
-              <Icons.google className="mr-2 h-4 w-4" />
-              Google
-            </Button>
+            {/* Buyer Radio Button */}
+            <label
+              htmlFor="buyer"
+              className={`flex items-center justify-center p-1 border rounded-lg cursor-pointer ${
+                selectedRole === "buyer" ? "bg-gray-900 text-white" : "bg-white"
+              }`}
+            >
+              <input
+                {...register("role", { required: true })}
+                type="radio"
+                value="buyer"
+                id="buyer"
+                className="hidden" // Hide the actual input
+              />
+              Buyer
+            </label>
+
+            {/* Seller Radio Button */}
+            <label
+              htmlFor="seller"
+              className={`flex items-center justify-center p-1 border rounded-lg cursor-pointer ${
+                selectedRole === "seller"
+                  ? "bg-gray-900 text-white"
+                  : "bg-white"
+              }`}
+            >
+              <input
+                {...register("role", { required: true })}
+                type="radio"
+                value="seller"
+                id="seller"
+                className="hidden" // Hide the actual input
+              />
+              Seller
+            </label>
           </div>
+          {errors.role && (
+            <span className="text-red-500">Please select a role</span>
+          )}
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
               <span className="bg-background px-2 text-muted-foreground">
-                Or continue with
+                Select account type
               </span>
             </div>
           </div>
@@ -168,9 +174,9 @@ export default function SignUp() {
         </CardContent>
         <CardFooter>
           Already have an account?{" "}
-          <a href="/sign-in" className="text-primary">
+          <Link href="/sign-in" className="text-primary mx-2">
             Sign in
-          </a>
+          </Link>
         </CardFooter>
       </Card>
     </div>
