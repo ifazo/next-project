@@ -27,7 +27,6 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get("limit") || "12");
     const skip = parseInt(searchParams.get("skip") || "0");
     const sort = searchParams.get("sort") || "asc";
-    const category = searchParams.get("category") || "";
     const price = parseInt(searchParams.get("price") || "0");
 
     let products;
@@ -36,14 +35,6 @@ export async function GET(request: NextRequest) {
       products = await prisma.product.findMany({
         where: {
           OR: [{ name: { contains: q } }, { description: { contains: q } }],
-        },
-        take: limit,
-        skip: skip,
-      });
-    } else if (category) {
-      products = await prisma.product.findMany({
-        where: {
-          categoryName: category,
         },
         take: limit,
         skip: skip,
