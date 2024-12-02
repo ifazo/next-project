@@ -29,12 +29,11 @@ export default function SignIn() {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    const { email, password } = data;
-    
+  const onSubmit: SubmitHandler<Inputs> = async (user) => {
+    const { email, password } = user;
+
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -54,16 +53,15 @@ export default function SignIn() {
       router.push("/");
     }
   };
-  console.log(watch("password")); // watch input value by passing the name of it
 
   const handleGoogleSignIn = async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
         redirectTo: "/",
       },
     });
-    console.log(data);
+    
     if (error) {
       toast({
         variant: "destructive",
@@ -79,13 +77,13 @@ export default function SignIn() {
   };
 
   const handleGitHubSignIn = async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: "github",
       options: {
         redirectTo: "/",
       },
     });
-    console.log(data);
+    
     if (error) {
       toast({
         variant: "destructive",

@@ -16,6 +16,7 @@ import { useToast } from "@/hooks/use-toast";
 import supabase from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import bcrypt from "bcryptjs";
 
 type Inputs = {
   name: string;
@@ -36,10 +37,14 @@ export default function SignUp() {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const { name, role, email, password } = data;
+    const hasedPassword = await bcrypt.hash(password, 10);
 
     const { error } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        data: { name: name, role: role },
+      },
     });
 
     if (error) {
@@ -54,7 +59,7 @@ export default function SignUp() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name, role, email, password }),
+        body: JSON.stringify({ name, role, email, password: hasedPassword })
       });
       const result = await response.json();
 
@@ -69,7 +74,7 @@ export default function SignUp() {
           title: "Success",
           description: `Sign up with ${email}`,
         });
-        router.push("/");
+        router.push("/sign-in");
       }
     }
   };

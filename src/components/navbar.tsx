@@ -46,6 +46,7 @@ export function Navbar() {
   React.useEffect(() => {
     const fetchUser = async () => {
       const { data, error } = await supabase.auth.getUser();
+      console.log("Current user:", data);
       if (error) {
         console.error("Error fetching user:", error.message);
       } else {
