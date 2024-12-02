@@ -15,39 +15,8 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-import supabase from "@/lib/supabase";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 
 export default function DashboardPage() {
-  const router = useRouter();
-  const [user, setUser] = useState<string | undefined>(undefined);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const { data, error } = await supabase.auth.getUser();
-
-        if (error) {
-          console.error("Error fetching user:", error.message);
-          return;
-        }
-
-        if (data?.user) {
-          setUser(data.user.email);
-        } else {
-          setUser(undefined);
-        }
-      } catch (err) {
-        console.error("Unexpected error fetching user:", err);
-      }
-    };
-    fetchUser();
-  }, []);
-
-  if (!user) {
-    router.push("/sign-in");
-  }
 
   return (
     <SidebarProvider>

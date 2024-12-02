@@ -15,8 +15,8 @@ import {
 } from "@/components/ui/navigation-menu";
 import { ModeToggle } from "@/components/mode-toggle";
 import { cn } from "@/lib/utils";
-import supabase from "@/lib/supabase";
 import { useToast } from "@/hooks/use-toast";
+import { signOut, useSession } from "next-auth/react";
 
 const routes = [
   {
@@ -41,25 +41,12 @@ export function Navbar() {
   const pathname = usePathname();
   const { toast } = useToast();
   const [isOpen, setIsOpen] = React.useState(false);
-  const [user, setUser] = React.useState<string | undefined>(undefined);
+  
+  const { data: session } = useSession();
+  console.log("session", session);
 
-  React.useEffect(() => {
-    const fetchUser = async () => {
-      const { data, error } = await supabase.auth.getUser();
-      console.log("Current user:", data);
-      if (error) {
-        console.error("Error fetching user:", error.message);
-      } else {
-        setUser(data.user.email);
-      }
-    };
-
-    fetchUser();
-  }, []);
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    setUser(undefined);
+  const handleSignOut = () => {
+    signOut();
     toast({
       title: "Success",
       description: "Signed out",
@@ -127,10 +114,10 @@ export function Navbar() {
           <div className="w-full flex-1 md:w-auto md:flex-none">
             <ModeToggle />
           </div>
-          {user ? (
-              <Button onClick={handleSignOut} variant="outline">
-                Sign out
-              </Button>
+          {session?.user ? (
+            <Button onClick={handleSignOut} variant="outline">
+              Sign out
+            </Button>
           ) : (
             <Link href="/sign-in">
               <Button variant="outline">Sign in</Button>

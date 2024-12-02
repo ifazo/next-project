@@ -13,7 +13,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useToast } from "@/hooks/use-toast";
-import supabase from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import bcrypt from "bcryptjs";
@@ -37,45 +36,29 @@ export default function SignUp() {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const { name, role, email, password } = data;
-    const hasedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { name: name, role: role },
+    const response = await fetch("/api/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
+      body: JSON.stringify({ name, role, email, password: hashedPassword }),
     });
+    const result = await response.json();
 
-    if (error) {
+    if (!result) {
       toast({
         variant: "destructive",
         title: "Error",
-        description: error.message,
+        description: "Failed to create user",
       });
     } else {
-      const response = await fetch("/api/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name, role, email, password: hasedPassword })
+      toast({
+        title: "Success",
+        description: `Sign up with ${email}`,
       });
-      const result = await response.json();
-
-      if (!result) {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Failed to create user",
-        });
-      } else {
-        toast({
-          title: "Success",
-          description: `Sign up with ${email}`,
-        });
-        router.push("/sign-in");
-      }
+      router.push("/sign-in");
     }
   };
 

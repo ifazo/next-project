@@ -13,10 +13,11 @@ import { Icons } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm, SubmitHandler } from "react-hook-form";
-import supabase from "@/lib/supabase";
 import { useToast } from "@/hooks/use-toast";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
+// import { useAppDispatch } from "@/store/hook";
+// import { setUser } from "@/store/features/userSlice";
 
 type Inputs = {
   email: string;
@@ -24,78 +25,68 @@ type Inputs = {
 };
 
 export default function SignIn() {
-  const router = useRouter();
   const { toast } = useToast();
+  // const dispatch = useAppDispatch();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = async (user) => {
-    const { email, password } = user;
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    
-    if (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error.message,
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    await signIn("credentials", data)
+      .then((res) => {
+        console.log(res);
+        // dispatch(setUser(session?.user));
+        toast({
+          title: "Success",
+          description: `Sign in with ${data.email}`,
+        });
+      })
+      .catch((error) => {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: error.message,
+        });
       });
-    } else {
-      toast({
-        title: "Success",
-        description: `Sign in with ${email}`,
-      });
-      router.push("/");
-    }
   };
 
   const handleGoogleSignIn = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: "/",
-      },
-    });
-    
-    if (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error.message,
+    await signIn("google", { callbackUrl: "/" })
+      .then(() => {
+        // dispatch(setUser(session?.user));
+        toast({
+          title: "Success",
+          description: "Sign in with Google",
+        });
+      })
+      .catch((error) => {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: error.message,
+        });
       });
-    } else {
-      toast({
-        title: "Success",
-        description: "Sign in with Google",
-      });
-    }
   };
 
   const handleGitHubSignIn = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "github",
-      options: {
-        redirectTo: "/",
-      },
-    });
-    
-    if (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error.message,
+    await signIn("github", { callbackUrl: "/" })
+      .then(() => {
+        // dispatch(setUser(session?.user));
+        toast({
+          title: "Success",
+          description: "Sign in with Github",
+        });
+      })
+      .catch((error) => {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: error.message,
+        });
       });
-    } else {
-      toast({
-        title: "Success",
-        description: "Sign in with GitHub",
-      });
-    }
   };
 
   return (
