@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { AppSidebar } from "@/components/app-sidebar"
+import { AppSidebar } from "@/components/app-sidebar";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -8,15 +8,22 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-import { Separator } from "@/components/ui/separator"
+} from "@/components/ui/breadcrumb";
+import { Separator } from "@/components/ui/separator";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
+// import { useSession } from "next-auth/react";
 
 export default function DashboardPage() {
+  // const session = useSession();
+
+  // if (session?.user?.role === "user") {
+  //   console.log("You are an user, welcome!");
+  // }
+  // console.log("You are not authorized to view this page!");
 
   return (
     <SidebarProvider>
@@ -29,9 +36,7 @@ export default function DashboardPage() {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="/">
-                    Home
-                  </BreadcrumbLink>
+                  <BreadcrumbLink href="/">Home</BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
@@ -51,5 +56,5 @@ export default function DashboardPage() {
         </div> */}
       </SidebarInset>
     </SidebarProvider>
-  )
+  );
 }

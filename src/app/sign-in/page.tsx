@@ -35,14 +35,22 @@ export default function SignIn() {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    await signIn("credentials", data)
+    await signIn("credentials", { ...data, redirect: false })
       .then((res) => {
         console.log(res);
-        // dispatch(setUser(session?.user));
-        toast({
-          title: "Success",
-          description: `Sign in with ${data.email}`,
-        });
+        if (res?.error === "CredentialsSignin") {
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: "Invalid email or password",
+          });
+        }
+        else {
+          toast({
+            title: "Success",
+            description: `Sign in with ${data.email}`,
+          });
+        }
       })
       .catch((error) => {
         toast({

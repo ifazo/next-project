@@ -1,84 +1,44 @@
-import NextAuth, { User } from "next-auth";
-import Google from "next-auth/providers/google";
-import GitHub from "next-auth/providers/github";
-import Credentials from "next-auth/providers/credentials";
+import NextAuth, { User as NextAuthUser } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import prisma from "./lib/prisma";
-import bcrypt from "bcryptjs";
-import { z } from "zod";
+import authConfig from "./auth.config";
 
-const credentialsSchema = z.object({
-  email: z.string().email("Invalid email format"),
-  password: z.string().min(6, "Password must be at least 6 characters long"),
-});
-
-interface IUser {
-  id: string;
-  name: string | null;
-  email: string;
-  password: string | null;
+interface User extends NextAuthUser {
+  role: string;
 }
-
-const getUser = async (
-  email: string,
-  password: string
-): Promise<IUser | null> => {
-  try {
-    const user = await prisma.user.findUnique({
-      where: {
-        email,
-      },
-    });
-
-    if (!user) {
-      return null;
-    }
-
-    const isValidPassword = user?.password
-      ? await bcrypt.compare(password, user.password)
-      : false;
-
-    if (!isValidPassword) {
-      return null;
-    }
-
-    return user;
-  } catch (error) {
-    console.error("Error fetching user from database:", error);
-    return null;
-  }
-};
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
-  providers: [
-    Google,
-    GitHub,
-    Credentials({
-      credentials: {
-        email: {},
-        password: {},
-      },
-      authorize: async (credentials) => {
-        try {
-          const { email, password } = credentialsSchema.parse(credentials);
-
-          const user = await getUser(email, password);
-
-          if (!user) {
-            throw new Error("Invalid credentials.");
-          }
-
-          return {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-          } as User;
-        } catch (error) {
-          console.error("Error authorizing user:", error);
-          return null;
-        }
-      },
-    }),
-  ],
+  ...authConfig,
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.name = user.name;
+        token.email = user.email;
+        token.picture = user.image;
+        token.role = (user as User).role;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      session.user = {
+        id: token.id as string,
+        name: token.name,
+        image: token.picture,
+        email: token.email as string,
+        emailVerified: null,
+      };
+      return session;
+    },
+  },
+  session: {
+    strategy: "jwt",
+  },
+  pages: {
+    signIn: "/sign-in",
+    signOut: "/",
+    error: "/error",
+  },
+  secret: process.env.AUTH_SECRET,
 });
