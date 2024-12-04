@@ -16,6 +16,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 // import { useAppDispatch } from "@/store/hook";
 // import { setUser } from "@/store/features/userSlice";
 
@@ -26,6 +27,7 @@ type Inputs = {
 
 export default function SignIn() {
   const { toast } = useToast();
+  const router = useRouter();
   // const dispatch = useAppDispatch();
 
   const {
@@ -37,7 +39,6 @@ export default function SignIn() {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     await signIn("credentials", { ...data, redirect: false })
       .then((res) => {
-        console.log(res);
         if (res?.error === "CredentialsSignin") {
           toast({
             variant: "destructive",
@@ -50,6 +51,7 @@ export default function SignIn() {
             title: "Success",
             description: `Sign in with ${data.email}`,
           });
+          router.push("/");
         }
       })
       .catch((error) => {

@@ -25,12 +25,13 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
+import { useSession } from "next-auth/react"
 
 // This is sample data.
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
+    name: "Name",
+    email: "mail@mail.com",
     avatar: "/avatars/shadcn.jpg",
   },
   teams: [
@@ -52,75 +53,71 @@ const data = {
   ],
   navMain: [
     {
-      title: "Playground",
-      url: "#",
+      title: "Admin",
+      url: "/dashboard/admin",
       icon: SquareTerminal,
       isActive: true,
       items: [
         {
-          title: "History",
-          url: "#",
+          title: "Users",
+          url: "/dashboard/admin/users",
         },
         {
-          title: "Starred",
-          url: "#",
+          title: "Shops",
+          url: "/dashboard/admin/shops",
         },
         {
-          title: "Settings",
-          url: "#",
+          title: "Category",
+          url: "/dashboard/admin/categories",
         },
       ],
     },
     {
-      title: "Models",
-      url: "#",
+      title: "Seller",
+      url: "/dashboard/seller",
       icon: Bot,
       items: [
         {
-          title: "Genesis",
-          url: "#",
+          title: "Shops",
+          url: "/dashboard/seller/shops",
         },
         {
-          title: "Explorer",
-          url: "#",
+          title: "Products",
+          url: "/dashboard/seller/products",
         },
         {
-          title: "Quantum",
-          url: "#",
+          title: "Revenue",
+          url: "/dashboard/seller/revenue",
         },
       ],
     },
     {
-      title: "Documentation",
-      url: "#",
+      title: "User",
+      url: "/dashboard/user",
       icon: BookOpen,
       items: [
         {
-          title: "Introduction",
-          url: "#",
+          title: "Cart",
+          url: "/dashboard/user/cart",
         },
         {
-          title: "Get Started",
-          url: "#",
+          title: "Orders",
+          url: "/dashboard/user/orders",
         },
         {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
+          title: "Wishlist",
+          url: "/dashboard/user/wishlist",
         },
       ],
     },
     {
       title: "Settings",
-      url: "#",
+      url: "/dashboard/settings",
       icon: Settings2,
       items: [
         {
-          title: "General",
-          url: "#",
+          title: "Profile",
+          url: "/dashboard/settings/profile",
         },
         {
           title: "Team",
@@ -139,24 +136,26 @@ const data = {
   ],
   projects: [
     {
-      name: "Design Engineering",
-      url: "#",
+      name: "Home",
+      url: "/",
       icon: Frame,
     },
     {
-      name: "Sales & Marketing",
-      url: "#",
+      name: "Products",
+      url: "/products",
       icon: PieChart,
     },
     {
-      name: "Travel",
-      url: "#",
+      name: "Shops",
+      url: "/shops",
       icon: Map,
     },
   ],
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { data: session } = useSession();
+  console.log("session role", session);
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>

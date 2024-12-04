@@ -57,7 +57,7 @@ export default {
           const user = await getUser(email, password);
 
           if (!user) {
-            throw new Error("Invalid credentials.");
+            return null;
           }
 
           return user;
