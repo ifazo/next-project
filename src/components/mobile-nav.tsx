@@ -16,28 +16,20 @@ const mainNav = [
     href: "/",
   },
   {
-    title: "Documentation",
-    href: "/docs",
+    title: "Products",
+    href: "/products",
   },
   {
-    title: "Components",
-    href: "/docs/components/accordion",
+    title: "Shops",
+    href: "/shops",
   },
   {
-    title: "Blocks",
-    href: "/blocks",
+    title: "Categories",
+    href: "/categories",
   },
   {
-    title: "Charts",
-    href: "/charts",
-  },
-  {
-    title: "Themes",
-    href: "/themes",
-  },
-  {
-    title: "Colors",
-    href: "/colors",
+    title: "Dashboard",
+    href: "/dashboard",
   },
 ];
 

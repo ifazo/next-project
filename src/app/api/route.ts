@@ -1,6 +1,6 @@
 export async function GET() {
   return new Response(
-    JSON.stringify({ message: "Hello World! from next.js api !!!" }),
+    JSON.stringify({ message: "Next api is running successfully!" }),
     {
       headers: { "content-type": "application/json" },
     },

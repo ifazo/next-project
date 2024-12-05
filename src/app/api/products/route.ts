@@ -3,17 +3,29 @@ import { type NextRequest } from "next/server";
 
 export async function POST(request: Request) {
   try {
+    const role = request.headers.get("role");
+    if (role !== "seller") {
+      return new Response(
+        JSON.stringify({ error: "Unauthorized: Only seller can create products" }),
+        {
+          status: 401,
+          headers: { "content-type": "application/json" },
+        },
+      );
+    }
     const body = await request.json();
     const product = await prisma.product.create({
       data: body,
     });
     return new Response(JSON.stringify(product), {
+      status: 201,
       headers: { "content-type": "application/json" },
     });
   } catch (error) {
     return new Response(
       JSON.stringify({ error: "Error creating product", details: error }),
       {
+        status: 500,
         headers: { "content-type": "application/json" },
       },
     );

@@ -83,7 +83,7 @@ const data = {
         },
         {
           title: "Products",
-          url: "/dashboard/seller/products",
+          url: "/dashboard/seller/products/add",
         },
         {
           title: "Revenue",

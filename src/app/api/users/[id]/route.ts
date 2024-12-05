@@ -36,20 +36,25 @@ export async function GET(request: Request) {
   }
 }
 
-// PATCH Request - Update a user by ID
 export async function PATCH(request: Request) {
   try {
-    // Extract `id` from the URL path
+    const role = request.headers.get("role");
+    if (role !== "admin") {
+      return new Response(
+        JSON.stringify({
+          error: "Forbidden: Only admins can perform this action",
+        }),
+        { status: 403, headers: { "content-type": "application/json" } }
+      );
+    }
     const url = new URL(request.url);
-    const id = url.pathname.split('/').pop(); // Assuming the ID is the last part of the URL
-
+    const id = url.pathname.split('/').pop();
     if (!id) {
       return new Response(JSON.stringify({ error: "User ID is required" }), {
         status: 400,
         headers: { "content-type": "application/json" },
       });
     }
-
     const body = await request.json();
     const user = await prisma.user.update({
       where: { id },
@@ -70,17 +75,23 @@ export async function PATCH(request: Request) {
 // DELETE Request - Delete a user by ID
 export async function DELETE(request: Request) {
   try {
-    // Extract `id` from the URL path
+    const role = request.headers.get("role");
+    if (role !== "admin") {
+      return new Response(
+        JSON.stringify({
+          error: "Forbidden: Only admins can perform this action",
+        }),
+        { status: 403, headers: { "content-type": "application/json" } }
+      );
+    }
     const url = new URL(request.url);
-    const id = url.pathname.split('/').pop(); // Assuming the ID is the last part of the URL
-
+    const id = url.pathname.split('/').pop(); 
     if (!id) {
       return new Response(JSON.stringify({ error: "User ID is required" }), {
         status: 400,
         headers: { "content-type": "application/json" },
       });
     }
-
     const user = await prisma.user.delete({
       where: { id },
     });

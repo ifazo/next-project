@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import bcrypt from "bcryptjs";
 
 export async function GET() {
   try {
@@ -16,10 +17,19 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const data = await request.json();
+    const { email, password } = data;
+    const role = request.headers.get("role");
+    if (role !== "admin") {
+      return new Response(
+        JSON.stringify({
+          error: "Forbidden: Only admins can perform this action",
+        }),
+        { status: 403, headers: { "content-type": "application/json" } }
+      );
+    }
     if (!data) {
       return new Response("Request body is required", { status: 400 });
     }
-    const { email } = data;
     const userExists = await prisma.user.findUnique({
       where: {
         email,
@@ -28,8 +38,10 @@ export async function POST(request: Request) {
     if (userExists) {
       return new Response("User already exists", { status: 400 });
     }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
     const user = await prisma.user.create({
-      data,
+      data: { ...data, password: hashedPassword },
     });
     return new Response(JSON.stringify(user), {
       headers: { "content-type": "application/json" },

@@ -15,7 +15,6 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import bcrypt from "bcryptjs";
 
 type Inputs = {
   name: string;
@@ -36,14 +35,13 @@ export default function SignUp() {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const { name, role, email, password } = data;
-    const hashedPassword = await bcrypt.hash(password, 10);
 
     const response = await fetch("/api/users", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name, role, email, password: hashedPassword }),
+      body: JSON.stringify({ name, role, email, password }),
     });
     const result = await response.json();
 
