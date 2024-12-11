@@ -16,15 +16,16 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default async function ProductPage({
-  params: { id },
+  params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
+  const { id } = await params;
   const res = await fetch(`${process.env.BASE_URL}/api/products/${id}`, {
     cache: "no-cache",
   });
   const product = await res.json();
-  
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="grid gap-6 lg:grid-cols-2">

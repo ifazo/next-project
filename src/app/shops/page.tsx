@@ -1,6 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { Store } from 'lucide-react'
+
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Shop } from "@prisma/client"
@@ -55,7 +56,7 @@ const shops = await res.json();
                 href={`/shops/${shop.id}`}
                 className="text-sm font-medium text-primary hover:underline"
               >
-                View Details →
+                View Shop →
               </Link>
             </CardFooter>
           </Card>
