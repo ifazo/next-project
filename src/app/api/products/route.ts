@@ -6,11 +6,13 @@ export async function POST(request: Request) {
     const role = request.headers.get("role");
     if (role !== "seller") {
       return new Response(
-        JSON.stringify({ error: "Unauthorized: Only seller can create products" }),
+        JSON.stringify({
+          error: "Unauthorized: Only seller can create products",
+        }),
         {
           status: 401,
           headers: { "content-type": "application/json" },
-        },
+        }
       );
     }
     const body = await request.json();
@@ -27,7 +29,7 @@ export async function POST(request: Request) {
       {
         status: 500,
         headers: { "content-type": "application/json" },
-      },
+      }
     );
   }
 }
@@ -36,6 +38,8 @@ export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
     const q = searchParams.get("q") || "";
+    const shopName = searchParams.get("shopName") || "";
+    const categorySlug = searchParams.get("categorySlug") || "";
     const limit = parseInt(searchParams.get("limit") || "12");
     const skip = parseInt(searchParams.get("skip") || "0");
     const sort = searchParams.get("sort") || "asc";
@@ -47,6 +51,26 @@ export async function GET(request: NextRequest) {
       products = await prisma.product.findMany({
         where: {
           OR: [{ name: { contains: q } }, { description: { contains: q } }],
+        },
+        take: limit,
+        skip: skip,
+      });
+    } else if (shopName) {
+      products = await prisma.product.findMany({
+        where: {
+          shop: {
+            name: shopName,
+          },
+        },
+        take: limit,
+        skip: skip,
+      });
+    } else if (categorySlug) {
+      products = await prisma.product.findMany({
+        where: {
+          category: {
+            slug: categorySlug,
+          },
         },
         take: limit,
         skip: skip,
@@ -84,7 +108,7 @@ export async function GET(request: NextRequest) {
       JSON.stringify({ error: "Error fetching products", details: error }),
       {
         headers: { "content-type": "application/json" },
-      },
+      }
     );
   }
 }

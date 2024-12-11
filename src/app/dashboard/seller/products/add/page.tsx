@@ -2,10 +2,9 @@
 
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Plus, X } from "lucide-react";
-
+import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -31,7 +30,6 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
-  CardFooter,
 } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
@@ -76,45 +74,6 @@ type ProductFormValues = z.infer<typeof productFormSchema>;
 export default function CreateProductForm() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  
-  const uploadImagesToImgBB = async (images) => {
-    // const imgToken = process.env.IMG_API_KEY;
-    const urls = [];
-  
-    for (const image of images) {
-      const formData = new FormData();
-      formData.append('image', image);
-  
-      const response = await fetch(`https://api.imgbb.com/1/upload?key=ad619be7112ba4f38a56d64bdd389b73`, {
-        method: 'POST',
-        body: formData,
-      });
-  
-      if (!response.ok) {
-        throw new Error('Failed to upload image');
-      }
-  
-      const result = await response.json();
-      urls.push(result.data.display_url);
-    }
-  
-    return urls;
-  };
-
-  const handleUpload = async (data) => {
-    try {
-      const images = data?.images;
-      console.log('Images:', images);
-      const imageUrls = await uploadImagesToImgBB(images);
-      data.images = imageUrls;
-      console.log(data);
-      // Call your product posting function
-      // await postProduct(data);
-      // navigate(0); // Reload or navigate as needed
-    } catch (error) {
-      console.error('Error uploading images or posting product:', error);
-    }
-  };
 
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productFormSchema),
@@ -133,13 +92,7 @@ export default function CreateProductForm() {
   async function onSubmit(data: ProductFormValues) {
     setIsLoading(true);
     console.log(data);
-    const images = data.images.map((image) => image.file);
-
-    const ModifiedData = { ...data, images };
-
-    await handleUpload(data);
     // Simulating an API call
-    console.log(ModifiedData);
     setTimeout(() => {
       setIsLoading(false);
       toast({

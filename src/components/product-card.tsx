@@ -10,28 +10,16 @@ import {
   CardHeader,
 } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Product } from "@prisma/client"
 
-interface ProductCardProps {
-  product: {
-    id: string
-    name: string
-    price: number
-    originalPrice?: number
-    image: string
-    category: string
-    isNew?: boolean
-    isSale?: boolean
-  }
-}
-
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product }: { product: Product }) {
   return (
     <Card className="group relative overflow-hidden">
       <CardHeader className="p-0">
         <Link href={`/products/${product.id}`}>
           <div className="aspect-square overflow-hidden">
             <Image
-              src={product.image}
+              src={product.images[0]}
               alt={product.name}
               width={400}
               height={400}
@@ -47,30 +35,37 @@ export function ProductCard({ product }: ProductCardProps) {
           <Heart className="h-5 w-5" />
           <span className="sr-only">Add to wishlist</span>
         </Button>
-        {product.isNew && (
-          <Badge className="absolute left-2 top-2">New</Badge>
-        )}
-        {product.isSale && (
-          <Badge variant="destructive" className="absolute left-2 top-2">
-            Sale
-          </Badge>
-        )}
+        {
+          product.stock === 0 && (
+            <Badge variant="destructive" className="absolute left-2 top-2">Out of Stock</Badge>
+          )
+        }
+        {
+          product.stock < 50 && product.stock > 0 && (
+            <Badge variant="secondary" className="absolute left-2 top-2">Low Stock</Badge>
+          )
+        }
+        {
+          product.stock > 50 && (
+            <Badge variant="secondary" className="absolute left-2 top-2">In Stock</Badge>
+          )
+        }
       </CardHeader>
       <CardContent className="p-4">
         <div className="flex items-center justify-between">
           <div>
             <h3 className="font-semibold">{product.name}</h3>
-            <p className="text-sm text-muted-foreground">{product.category}</p>
+            <p className="text-sm text-muted-foreground">{product.shopName}</p>
           </div>
           <div className="text-right">
             <div className="font-semibold">
               ${product.price.toFixed(2)}
             </div>
-            {product.originalPrice && (
+            {/* {product.originalPrice && (
               <div className="text-sm text-muted-foreground line-through">
                 ${product.originalPrice.toFixed(2)}
               </div>
-            )}
+            )} */}
           </div>
         </div>
       </CardContent>

@@ -1,7 +1,6 @@
-import { Suspense } from "react"
-
-import { ProductCard } from "@/components/product-card"
-import { ProductFilters } from "@/components/product-filters"
+import { Suspense } from "react";
+import { ProductCard } from "@/components/product-card";
+import { ProductFilters } from "@/components/product-filters";
 import {
   Pagination,
   PaginationContent,
@@ -10,75 +9,9 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination"
-import { Skeleton } from "@/components/ui/skeleton"
-
-// Sample product data - replace with your actual data fetching logic
-const products = [
-  {
-    id: "1",
-    name: "Classic White Sneakers",
-    price: 89.99,
-    originalPrice: 119.99,
-    image: "/placeholder.svg?height=400&width=400",
-    category: "Footwear",
-    isNew: true,
-  },
-  {
-    id: "2",
-    name: "Leather Crossbody Bag",
-    price: 149.99,
-    image: "/placeholder.svg?height=400&width=400",
-    category: "Accessories",
-  },
-  {
-    id: "3",
-    name: "Denim Jacket",
-    price: 79.99,
-    originalPrice: 99.99,
-    image: "/placeholder.svg?height=400&width=400",
-    category: "Clothing",
-    isSale: true,
-  },
-  {
-    id: "4",
-    name: "Gold Pendant Necklace",
-    price: 199.99,
-    image: "/placeholder.svg?height=400&width=400",
-    category: "Jewelry",
-    isNew: true,
-  },
-  {
-    id: "5",
-    name: "Wool Blend Sweater",
-    price: 69.99,
-    image: "/placeholder.svg?height=400&width=400",
-    category: "Clothing",
-  },
-  {
-    id: "6",
-    name: "Canvas Backpack",
-    price: 59.99,
-    originalPrice: 79.99,
-    image: "/placeholder.svg?height=400&width=400",
-    category: "Accessories",
-    isSale: true,
-  },
-  {
-    id: "7",
-    name: "Leather Loafers",
-    price: 129.99,
-    image: "/placeholder.svg?height=400&width=400",
-    category: "Footwear",
-  },
-  {
-    id: "8",
-    name: "Gold Hoop Earrings",
-    price: 99.99,
-    image: "/placeholder.svg?height=400&width=400",
-    category: "Jewelry",
-  }
-]
+} from "@/components/ui/pagination";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Product } from "@prisma/client";
 
 function ProductsLoading() {
   return (
@@ -93,10 +26,15 @@ function ProductsLoading() {
         </div>
       ))}
     </div>
-  )
+  );
 }
 
-export default function ProductsPage() {
+export default async function ProductsPage() {
+  const res = await fetch(`${process.env.BASE_URL}/api/products`, {
+    cache: "no-cache",
+  });
+  const products = await res.json();
+  
   return (
     <div className="container space-y-8 p-8">
       <div className="space-y-4">
@@ -108,7 +46,7 @@ export default function ProductsPage() {
       <ProductFilters />
       <Suspense fallback={<ProductsLoading />}>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {products.map((product) => (
+          {products.map((product: Product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
@@ -138,6 +76,5 @@ export default function ProductsPage() {
         </PaginationContent>
       </Pagination>
     </div>
-  )
+  );
 }
-
