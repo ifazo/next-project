@@ -15,6 +15,9 @@ const playfairDisplay = Playfair_Display({
 export const metadata: Metadata = {
   title: "Ifaz Next App",
   description: "Created by ziaul karim ifaz",
+  icons: {
+    icon: '/favicon.png',
+  },
 };
 
 export default function RootLayout({

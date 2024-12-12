@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { Icons } from "./ui/icons"
+import Image from "next/image"
 
 export function MainNav() {
   const pathname = usePathname()
@@ -11,7 +11,8 @@ export function MainNav() {
   return (
     <div className="mr-4 hidden md:flex">
       <Link href="/" className="mr-4 flex items-center gap-2 lg:mr-6">
-        <Icons.logo className="h-6 w-6" />
+        {/* <Icons.logo className="h-6 w-6" /> */}
+        <Image height={24} width={24} src="/logo.png" alt="logo" />
         <span className="hidden font-bold lg:inline-block">
             Ifaz.next
         </span>

@@ -52,7 +52,7 @@ export default async function CategoriesPage() {
                 Added {new Date(category.createdAt).toLocaleDateString()}
               </div>
               <Button asChild variant="ghost" className="text-sm font-medium">
-                <Link href={`/categories/${category.slug}`}>
+                <Link href={`/categories/${category.id}`}>
                   View Products
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>

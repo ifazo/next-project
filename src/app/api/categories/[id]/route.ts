@@ -3,9 +3,9 @@ import prisma from "@/lib/prisma";
 export async function GET(request: Request) {
   try {
     const url = new URL(request.url);
-    const slug = url.pathname.split("/").pop();
+    const id = url.pathname.split("/").pop();
     const categories = await prisma.category.findUnique({
-      where: { slug },
+      where: { id },
     });
     return new Response(JSON.stringify(categories), {
       status: 200,
@@ -26,7 +26,7 @@ export async function GET(request: Request) {
 export async function PATCH(request: Request) {
   try {
     const url = new URL(request.url);
-    const slug = url.pathname.split("/").pop();
+    const id = url.pathname.split("/").pop();
     const body = await request.json();
     const role = request.headers.get("role");
     if (role !== "admin") {
@@ -38,7 +38,7 @@ export async function PATCH(request: Request) {
       );
     }
     const category = await prisma.category.update({
-      where: { slug },
+      where: { id },
       data: body,
     });
     return new Response(JSON.stringify(category), {
@@ -60,7 +60,7 @@ export async function PATCH(request: Request) {
 export async function DELETE(request: Request) {
   try {
     const url = new URL(request.url);
-    const slug = url.pathname.split("/").pop();
+    const id = url.pathname.split("/").pop();
     const role = request.headers.get("role");
     if (role !== "admin") {
       return new Response(
@@ -71,7 +71,7 @@ export async function DELETE(request: Request) {
       );
     }
     const category = await prisma.category.delete({
-      where: { slug },
+      where: { id },
     });
     return new Response(JSON.stringify(category), {
       status: 200,

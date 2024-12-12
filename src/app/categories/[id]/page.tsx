@@ -18,10 +18,10 @@ import { Product } from "@prisma/client";
 export default async function CategoryPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ id: string }>;
 }) {
-  const { slug } = await params;
-  const res = await fetch(`${process.env.BASE_URL}/api/categories/${slug}`, {
+  const { id } = await params;
+  const res = await fetch(`${process.env.BASE_URL}/api/categories/${id}`, {
     cache: "no-cache",
   });
   const category = await res.json();
