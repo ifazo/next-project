@@ -1,0 +1,92 @@
+[
+  {
+    "id": "6751673010e572f0f1976013",
+    "name": "Electronics",
+    "slug": "electronics",
+    "image": "https://example.com/images/electronics.jpg",
+    "details": "Devices and gadgets including smartphones, laptops, and accessories.",
+    "createdAt": "2024-12-05T08:41:20.664Z",
+    "updatedAt": "2024-12-05T08:41:20.664Z"
+  },
+  {
+    "id": "6751674d10e572f0f1976014",
+    "name": "Fashion",
+    "slug": "fashion",
+    "image": "https://example.com/images/fashion.jpg",
+    "details": "Clothing, footwear, and accessories for men, women, and kids.",
+    "createdAt": "2024-12-05T08:41:49.445Z",
+    "updatedAt": "2024-12-05T08:41:49.445Z"
+  },
+  {
+    "id": "6751677a10e572f0f1976015",
+    "name": "Home Appliances",
+    "slug": "home-appliances",
+    "image": "https://example.com/images/home-appliances.jpg",
+    "details": "Kitchen and home essentials including refrigerators, washing machines, and more.",
+    "createdAt": "2024-12-05T08:42:34.327Z",
+    "updatedAt": "2024-12-05T08:42:34.327Z"
+  },
+  {
+    "id": "6751678d10e572f0f1976016",
+    "name": "Beauty & Personal Care",
+    "slug": "beauty-care",
+    "image": "https://example.com/images/beauty-care.jpg",
+    "details": "Skincare, haircare, and personal grooming products.",
+    "createdAt": "2024-12-05T08:42:53.218Z",
+    "updatedAt": "2024-12-05T08:42:53.218Z"
+  },
+  {
+    "id": "6751679b10e572f0f1976017",
+    "name": "Books",
+    "slug": "books",
+    "image": "https://example.com/images/books.jpg",
+    "details": "A wide range of books including fiction, non-fiction, and academic materials.",
+    "createdAt": "2024-12-05T08:43:07.220Z",
+    "updatedAt": "2024-12-05T08:43:07.220Z"
+  },
+  {
+    "id": "675167aa10e572f0f1976018",
+    "name": "Fitness & Sports",
+    "slug": "fitness-sports",
+    "image": "https://example.com/images/fitness-sports.jpg",
+    "details": "Sporting goods, fitness equipment, and outdoor gear.",
+    "createdAt": "2024-12-05T08:43:22.571Z",
+    "updatedAt": "2024-12-05T08:43:22.571Z"
+  },
+  {
+    "id": "675167d710e572f0f1976019",
+    "name": "Automobiles",
+    "slug": "automobiles",
+    "image": "https://example.com/images/automotive.jpg",
+    "details": "Car accessories, tools, and maintenance products.",
+    "createdAt": "2024-12-05T08:44:07.536Z",
+    "updatedAt": "2024-12-05T08:44:07.536Z"
+  },
+  {
+    "id": "675167ed10e572f0f197601a",
+    "name": "Toys & Games",
+    "slug": "toys-games",
+    "image": "https://example.com/images/toys-games.jpg",
+    "details": "Toys, board games, and video games for all age groups.",
+    "createdAt": "2024-12-05T08:44:29.103Z",
+    "updatedAt": "2024-12-05T08:44:29.103Z"
+  },
+  {
+    "id": "675167f910e572f0f197601b",
+    "name": "Groceries",
+    "slug": "groceries",
+    "image": "https://example.com/images/groceries.jpg",
+    "details": "Everyday essentials including fresh produce, snacks, and pantry items.",
+    "createdAt": "2024-12-05T08:44:41.964Z",
+    "updatedAt": "2024-12-05T08:44:41.964Z"
+  },
+  {
+    "id": "6751680c10e572f0f197601c",
+    "name": "Furniture",
+    "slug": "furniture",
+    "image": "https://example.com/images/furniture.jpg",
+    "details": "Home and office furniture including sofas, desks, and chairs.",
+    "createdAt": "2024-12-05T08:45:00.123Z",
+    "updatedAt": "2024-12-05T08:45:00.123Z"
+  }
+]
