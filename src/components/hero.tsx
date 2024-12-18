@@ -10,17 +10,6 @@ import { Icons } from "./ui/icons";
 export function Hero() {
   return (
     <section className="relative">
-      {/* Background with overlay */}
-      {/* <div className="absolute inset-0">
-        <Image
-            height={800}
-            width={1600}
-          src="/img/bg-image.jpg"
-          alt="Background"
-          className="object-cover object-center -z-10 opacity-75"
-          priority
-        />
-      </div> */}
 
       <div className="container px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-2 lg:gap-16">
