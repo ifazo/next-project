@@ -9,11 +9,13 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import MoreProducts from "@/components/more-products";
+// import ColorQuantitySelector from "@/components/color-quantity-selector";
+import { loadStripe, Stripe } from "@stripe/stripe-js";
+
+const stripePromise = loadStripe(process.env.STRIPE_PUBLISHABLE_KEY || "") as Promise<Stripe | null>;
 
 export default async function ProductPage({
   params,
@@ -25,6 +27,36 @@ export default async function ProductPage({
     cache: "no-cache",
   });
   const product = await res.json();
+  
+  const handlePayment = async (quantity: number) => {
+    const stripe = await stripePromise as Stripe | null;
+    if (!stripe) {
+      console.error("Failed to load Stripe");
+      return;
+    }
+    const response = await fetch("/api/payment", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        products: [{ ...product, quantity }],
+      }),
+    });
+    const session = await response.json();
+    const result = await stripe.redirectToCheckout({ sessionId: session.id });
+    if (result.error) {
+      console.error(result.error.message);
+    }
+  };
+
+  // const handleQuantityChange = (quantity: number) => {
+  //   console.log("Quantity changed:", quantity);
+  // };
+
+  // const handleColorChange = (color: string) => {
+  //   console.log("Color selected:", color);
+  // };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -33,8 +65,8 @@ export default async function ProductPage({
           <Carousel className="w-full max-w-xs mx-auto">
             <CarouselContent>
               {product.images.map(
-                ({ image, index }: { image: string; index: number }) => (
-                  <CarouselItem key={index}>
+                ({ image }: { image: string }) => (
+                  <CarouselItem key={image}>
                     <Image
                       src={image}
                       alt="Product main image"
@@ -51,9 +83,9 @@ export default async function ProductPage({
           </Carousel>
           <div className="flex justify-center space-x-2">
             {product.images.map(
-              ({ image, index }: { image: string; index: number }) => (
+              ({ image }: { image: string }) => (
                 <Image
-                  key={index}
+                  key={image}
                   src={image}
                   alt="card image"
                   width={60}
@@ -84,51 +116,22 @@ export default async function ProductPage({
             {/* <div className="text-sm font-medium text-green-600">You save $30.01 (25%)</div> */}
           </div>
           <Separator />
+          {/* <ColorQuantitySelector
+            onQuantityChange={handleQuantityChange}
+            onColorChange={handleColorChange}
+          /> */}
           <div className="space-y-4">
-            <div>
-              <Label htmlFor="color">Color</Label>
-              <RadioGroup
-                id="color"
-                defaultValue="black"
-                className="flex gap-2 mt-2"
-              >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="black" id="black" />
-                  <Label htmlFor="black">Black</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="brown" id="brown" />
-                  <Label htmlFor="brown">White</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="tan" id="tan" />
-                  <Label htmlFor="tan">Brown</Label>
-                </div>
-              </RadioGroup>
-            </div>
-            <div>
-              <Label htmlFor="quantity">Quantity</Label>
-              <div className="flex items-center mt-2">
-                <Button variant="outline" size="icon">
-                  -
-                </Button>
-                <Input
-                  id="quantity"
-                  type="number"
-                  className="w-20 text-center mx-2"
-                  value="1"
-                  readOnly
-                />
-                <Button variant="outline" size="icon">
-                  +
-                </Button>
-              </div>
-            </div>
-          </div>
-          <div className="space-y-4">
-            <Button className="w-full">Add to Cart</Button>
+            <Button
+              onClick={() => {
+                // toast.loading("Processing payment...");
+                handlePayment(1);
+              }}
+              className="w-full"
+            >
+              Buy now
+            </Button>
             <Button variant="outline" className="w-full">
-              Add to Wishlist
+              Add to cart
             </Button>
           </div>
           <Card>
@@ -187,6 +190,7 @@ export default async function ProductPage({
           </div>
         </TabsContent>
       </Tabs>
+      <MoreProducts shopName={product.shopName} currentProductId={id} />
     </div>
   );
 }
