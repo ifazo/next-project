@@ -1,15 +1,4 @@
-// "use client";
-
-// import { useSession } from "next-auth/react";
-
 export default function DashboardPage() {
-  // const session = useSession();
-
-  // if (session?.user?.role === "user") {
-  //   console.log("You are an user, welcome!");
-  // }
-  // console.log("You are not authorized to view this page!");
-
   return (
     <div>
       <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
