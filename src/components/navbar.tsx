@@ -7,18 +7,19 @@ import { User } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
+import { CartModal } from "./cart-modal";
 
 export function Navbar() {
   const { data: session } = useSession();
-  const {toast} = useToast();
+  const { toast } = useToast();
 
   const handleSignOut = () => {
     signOut();
     toast({
       title: "Success",
       description: "Signed out successfully",
-    })
-  }
+    });
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:border-border">
@@ -31,11 +32,12 @@ export function Navbar() {
           </div>
           <nav className="flex items-center gap-2">
             <ModeSwitcher />
+            <CartModal />
             {session?.user ? (
               <Button
                 onClick={handleSignOut}
                 variant="outline"
-                className="h-8 w-auto px-1 flex items-center"
+                className="px-2 flex items-center"
               >
                 <User />
                 <span>Sign out</span>
@@ -43,7 +45,7 @@ export function Navbar() {
             ) : (
               <Button
                 variant="outline"
-                className="h-8 w-auto px-2 flex items-center"
+                className="px-2 flex items-center"
               >
                 <Link href="/sign-in" className="flex items-center gap-1">
                   <User />

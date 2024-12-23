@@ -5,12 +5,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { loadStripe, Stripe } from "@stripe/stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 import { Product } from "@prisma/client";
+import { useAppDispatch } from "@/store/hook";
+import { addProduct } from "@/store/features/cartSlice";
+import { useToast } from "@/hooks/use-toast";
+import { CreditCard, ShoppingCart } from "lucide-react";
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
-) as Promise<Stripe>;
+);
 
 export default function ColorQuantitySelector({
   product,
@@ -20,14 +24,28 @@ export default function ColorQuantitySelector({
   const [quantity, setQuantity] = useState(1);
   const [color, setColor] = useState("black");
 
+  const { toast } = useToast();
+  const dispatch = useAppDispatch();
   const totalPrice = product.price * quantity;
 
   const increaseQuantity = () => setQuantity((prev) => prev + 1);
   const decreaseQuantity = () =>
     setQuantity((prev) => (prev > 1 ? prev - 1 : prev));
 
+  const handleAddToCart = () => {
+    dispatch(addProduct({ ...product, quantity, color }));
+    toast({
+      title: "Success",
+      description: "Product added to cart",
+    });
+  };
+
   const handlePayment = async () => {
-    const stripe = (await stripePromise) as Stripe;
+    toast({
+      title: "Checking out",
+      description: "Redirecting to checkout...",
+    });
+    const stripe = await stripePromise;
     if (!stripe) {
       console.error("Failed to load Stripe");
       return;
@@ -102,9 +120,15 @@ export default function ColorQuantitySelector({
         {/* Buy now and Add to cart buttons */}
         <div className="flex space-x-4">
           <Button onClick={handlePayment} className="w-full">
+          <CreditCard className="mr-2 h-4 w-4" />
             Buy now ${totalPrice.toFixed(2)}
           </Button>
-          <Button variant="outline" className="w-full">
+          <Button
+            onClick={handleAddToCart}
+            variant="outline"
+            className="w-full"
+          >
+            <ShoppingCart className="mr-2 h-4 w-4" />
             Add to cart
           </Button>
         </div>

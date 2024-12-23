@@ -1,7 +1,9 @@
 import { Product as PrismaProduct } from "@prisma/client";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { RootState } from "../store";
 
 interface Product extends PrismaProduct {
+  color: string;
   quantity: number;
 }
 
@@ -49,9 +51,9 @@ const productSlice = createSlice({
       }
       saveState(state);
     },
-    removeProduct: (state, action: PayloadAction<Product>) => {
+    removeProduct: (state, action: PayloadAction<string>) => {
       state.products = state.products.filter(
-        (product: Product) => product.id !== action.payload.id
+        (product: Product) => product.id !== action.payload.toString()
       );
       saveState(state);
     },
@@ -61,6 +63,15 @@ const productSlice = createSlice({
     },
   },
 });
+
+export const selectCartItems = (state: RootState) => state.cart.products;
+export const selectCartTotal = (state: RootState) => {
+  return state.cart.products.reduce(
+    (total: number, product: Product) => total + product.price * product.quantity,
+    0
+  );
+}
+export const selectCartItemsCount = (state: RootState) => state.cart.products.length;
 
 export const { addProduct, removeProduct, clearProducts } =
   productSlice.actions;
