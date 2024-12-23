@@ -19,7 +19,7 @@ export async function FeaturedShops() {
   const shops = await res.json();
 
   return (
-    <section className="py-8">
+    <section className="w-full py-8">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
           <div className="space-y-1">

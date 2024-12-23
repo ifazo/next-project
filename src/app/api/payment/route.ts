@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
         product_data: {
           name: product.name,
           images: [product.images[0]],
-          description: `Color: ${product.color}`,
+          description: `Variant: ${product.variant}`,
         },
         unit_amount: Math.round(product.price * 100),
       },

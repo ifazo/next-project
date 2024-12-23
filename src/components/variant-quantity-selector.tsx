@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { loadStripe } from "@stripe/stripe-js";
 import { Product } from "@prisma/client";
 import { useAppDispatch } from "@/store/hook";
@@ -16,13 +15,13 @@ const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
 );
 
-export default function ColorQuantitySelector({
+export default function VariantQuantitySelector({
   product,
 }: {
   product: Product;
 }) {
   const [quantity, setQuantity] = useState(1);
-  const [color, setColor] = useState("black");
+  const [variant, setVariant] = useState(product.variants[0]);
 
   const { toast } = useToast();
   const dispatch = useAppDispatch();
@@ -33,7 +32,7 @@ export default function ColorQuantitySelector({
     setQuantity((prev) => (prev > 1 ? prev - 1 : prev));
 
   const handleAddToCart = () => {
-    dispatch(addProduct({ ...product, quantity, color }));
+    dispatch(addProduct({ ...product, quantity, variant }));
     toast({
       title: "Success",
       description: "Product added to cart",
@@ -56,7 +55,7 @@ export default function ColorQuantitySelector({
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        products: [{ ...product, quantity, color }],
+        products: [{ ...product, quantity, variant }],
       }),
     });
     const session = await response.json();
@@ -69,25 +68,27 @@ export default function ColorQuantitySelector({
   return (
     <div>
       <div className="space-y-4">
-        {/* Color Selector */}
+        {/* Variant Selector */}
         <div>
-          <Label htmlFor="color">Color</Label>
-          <RadioGroup
-            id="color"
-            defaultValue="black"
-            className="flex gap-2 mt-2"
-            onValueChange={(value) => setColor(value)}
-          >
-            {["black", "white", "brown"].map((color) => (
-              <div key={color} className="flex items-center space-x-2">
-                <RadioGroupItem value={color} id={color} />
-                <Label htmlFor={color}>
-                  {color.charAt(0).toUpperCase() + color.slice(1)}
-                </Label>
-              </div>
+          <Label htmlFor="variant">Variant</Label>
+          <div className="flex gap-2 mt-2">
+            {product.variants.map((variantOption) => (
+              <Button
+                key={variantOption}
+                variant="outline"
+                className={`px-4 py-2 ${
+                  variant === variantOption
+                    ? "ring-2 ring-primary"
+                    : "ring-2 ring-transparent"
+                }`}
+                onClick={() => setVariant(variantOption)}
+              >
+                {variantOption.charAt(0).toUpperCase() + variantOption.slice(1)}
+              </Button>
             ))}
-          </RadioGroup>
+          </div>
         </div>
+
         {/* Quantity Selector */}
         <div>
           <Label htmlFor="quantity">Quantity</Label>
@@ -120,7 +121,7 @@ export default function ColorQuantitySelector({
         {/* Buy now and Add to cart buttons */}
         <div className="flex space-x-4">
           <Button onClick={handlePayment} className="w-full">
-          <CreditCard className="mr-2 h-4 w-4" />
+            <CreditCard className="mr-2 h-4 w-4" />
             Buy now ${totalPrice.toFixed(2)}
           </Button>
           <Button

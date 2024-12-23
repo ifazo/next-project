@@ -3,9 +3,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import MoreProducts from "@/components/more-products";
-import ColorQuantitySelector from "@/components/color-quantity-selector";
 import { ProductReviews } from "@/components/product-reviews";
 import ProductImages from "@/components/product-images";
+import VariantQuantitySelector from "@/components/variant-quantity-selector";
 
 export default async function ProductPage({
   params,
@@ -42,7 +42,7 @@ export default async function ProductPage({
             {/* <div className="text-sm font-medium text-green-600">You save $30.01 (25%)</div> */}
           </div>
           <Separator />
-          <ColorQuantitySelector product={product} />
+          <VariantQuantitySelector product={product} />
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center space-x-2 text-sm">

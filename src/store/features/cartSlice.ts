@@ -3,7 +3,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 
 interface Product extends PrismaProduct {
-  color: string;
+  variant: string;
   quantity: number;
 }
 
@@ -40,14 +40,21 @@ const productSlice = createSlice({
   initialState,
   reducers: {
     addProduct: (state, action: PayloadAction<Product>) => {
-      const existingProduct = state.products.find(
-        (product: Product) => product.id === action.payload.id
+      const existingProductIndex = state.products.findIndex(
+        (product: Product) =>
+          product.id === action.payload.id 
       );
 
-      if (existingProduct) {
-        existingProduct.quantity += 1;
+      if (existingProductIndex !== -1) {
+        state.products[existingProductIndex] = {
+          ...action.payload,
+          quantity: action.payload.quantity,
+        };
       } else {
-        state.products.push({ ...action.payload, quantity: 1 });
+        state.products.push({
+          ...action.payload,
+          quantity: action.payload.quantity,
+        });
       }
       saveState(state);
     },
@@ -67,11 +74,13 @@ const productSlice = createSlice({
 export const selectCartItems = (state: RootState) => state.cart.products;
 export const selectCartTotal = (state: RootState) => {
   return state.cart.products.reduce(
-    (total: number, product: Product) => total + product.price * product.quantity,
+    (total: number, product: Product) =>
+      total + product.price * product.quantity,
     0
   );
-}
-export const selectCartItemsCount = (state: RootState) => state.cart.products.length;
+};
+export const selectCartItemsCount = (state: RootState) =>
+  state.cart.products.length;
 
 export const { addProduct, removeProduct, clearProducts } =
   productSlice.actions;

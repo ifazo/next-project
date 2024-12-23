@@ -36,7 +36,7 @@ export default async function ProductsPage() {
   const products = await res.json();
   
   return (
-    <div className="container space-y-8 p-8">
+    <div className="container mx-auto space-y-8 p-8">
       <div className="space-y-4">
         <h1 className="text-3xl font-bold">All Products</h1>
         <p className="text-muted-foreground">

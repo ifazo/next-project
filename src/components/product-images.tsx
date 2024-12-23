@@ -8,26 +8,12 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 
-interface ProductImagesProps {
-  images: string[];
-}
-
-const ProductImages: React.FC<ProductImagesProps> = ({ images }) => {
+export default function ProductImages({ images }: { images: string[] }) {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   const handleThumbnailClick = (index: number) => {
     setSelectedImageIndex(index);
   };
-
-//   const handleNext = () => {
-//     setSelectedImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-//   };
-
-//   const handlePrevious = () => {
-//     setSelectedImageIndex(
-//       (prevIndex) => (prevIndex - 1 + images.length) % images.length
-//     );
-//   };
 
   return (
     <div className="space-y-4">
@@ -43,8 +29,6 @@ const ProductImages: React.FC<ProductImagesProps> = ({ images }) => {
             />
           </CarouselItem>
         </CarouselContent>
-        {/* <CarouselPrevious onClick={handlePrevious} />
-        <CarouselNext onClick={handleNext} /> */}
       </Carousel>
 
       <div className="flex justify-center space-x-2">
@@ -55,7 +39,7 @@ const ProductImages: React.FC<ProductImagesProps> = ({ images }) => {
             alt={`Thumbnail image ${index + 1}`}
             width={60}
             height={60}
-            className={`rounded-md object-cover cursor-pointer hover:ring-2 ${
+            className={`rounded-md object-cover cursor-pointer ${
               selectedImageIndex === index ? "ring-primary ring-2" : ""
             }`}
             onClick={() => handleThumbnailClick(index)}
@@ -64,6 +48,4 @@ const ProductImages: React.FC<ProductImagesProps> = ({ images }) => {
       </div>
     </div>
   );
-};
-
-export default ProductImages;
+}

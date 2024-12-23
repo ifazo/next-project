@@ -25,7 +25,7 @@ import { Product as PrismaProduct } from "@prisma/client";
 import { loadStripe } from "@stripe/stripe-js";
 
 interface Product extends PrismaProduct {
-  color: string;
+  variant: string;
   quantity: number;
 }
 
@@ -120,7 +120,10 @@ export function CartModal() {
                           ${item.price}
                         </span>
                         <span className="line-clamp-1 text-sm text-muted-foreground mb-1">
-                          Qty: {item.quantity}
+                          <div className="flex items-center space-x-4">
+                            <span>Variant: {item.variant}</span>
+                            <span>Quantity: {item.quantity}</span>
+                          </div>
                         </span>
                       </div>
                     </div>
