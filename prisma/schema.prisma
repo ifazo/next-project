@@ -122,9 +122,9 @@ model Review {
   rating    Float
   comment   String
   productId String   @map("product_id")
-  userId    String   @unique @map("user_id")
+  userEmail String   @map("user_email")
   product   Product  @relation(fields: [productId], references: [id])
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userEmail], references: [email])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

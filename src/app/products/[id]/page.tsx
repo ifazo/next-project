@@ -1,6 +1,5 @@
 import Image from "next/image";
-import { Star, Truck, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Star, Truck } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
@@ -13,6 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import MoreProducts from "@/components/more-products";
 import ColorQuantitySelector from "@/components/color-quantity-selector";
+import { ProductReviews } from "@/components/product-reviews";
 
 export default async function ProductPage({
   params,
@@ -107,35 +107,10 @@ export default async function ProductPage({
           </ul>
         </TabsContent>
         <TabsContent value="reviews" className="mt-4">
-          <div className="space-y-4">
-            {[...Array(3)].map((_, index) => (
-              <Card key={index}>
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between">
-                    <div className="font-semibold">John Doe</div>
-                    <div className="flex">
-                      {[...Array(5)].map((_, starIndex) => (
-                        <Star
-                          key={starIndex}
-                          className="w-4 h-4 fill-primary"
-                        />
-                      ))}
-                    </div>
-                  </div>
-                  <p className="mt-2 text-sm text-gray-600">
-                    Great wallet! The leather quality is excellent, and it has
-                    plenty of space for all my cards.
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-            <Button variant="outline" className="w-full">
-              Post Review
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
-          </div>
+          <ProductReviews productId={id} />
         </TabsContent>
       </Tabs>
+      <hr className="my-4" />
       <MoreProducts shopName={product.shopName} currentProductId={id} />
     </div>
   );

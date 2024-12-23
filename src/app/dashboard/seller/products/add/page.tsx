@@ -91,7 +91,7 @@ export default function CreateProductForm() {
 
   async function onSubmit(data: ProductFormValues) {
     setIsLoading(true);
-    console.log(data);
+    // console.log(data);
     // Simulating an API call
     setTimeout(() => {
       setIsLoading(false);
