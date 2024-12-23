@@ -15,6 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { Product } from "@prisma/client";
 
 export function ProductCard({ product }: { product: Product }) {
+  
   const handleAddToWishlist = () => {
     console.log("Add to wishlist");
   };

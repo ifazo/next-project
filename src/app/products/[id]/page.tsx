@@ -1,18 +1,11 @@
-import Image from "next/image";
 import { Star, Truck } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import MoreProducts from "@/components/more-products";
 import ColorQuantitySelector from "@/components/color-quantity-selector";
 import { ProductReviews } from "@/components/product-reviews";
+import ProductImages from "@/components/product-images";
 
 export default async function ProductPage({
   params,
@@ -28,37 +21,7 @@ export default async function ProductPage({
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="grid gap-6 lg:grid-cols-2">
-        <div className="space-y-4">
-          <Carousel className="w-full max-w-xs mx-auto">
-            <CarouselContent>
-              {product.images.map(({ image }: { image: string }) => (
-                <CarouselItem key={image}>
-                  <Image
-                    src={image}
-                    alt="Product main image"
-                    width={400}
-                    height={400}
-                    className="rounded-lg object-cover"
-                  />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-          </Carousel>
-          <div className="flex justify-center space-x-2">
-            {product.images.map(({ image }: { image: string }) => (
-              <Image
-                key={image}
-                src={image}
-                alt="card image"
-                width={60}
-                height={60}
-                className="rounded-md object-cover cursor-pointer hover:ring-2 hover:ring-primary"
-              />
-            ))}
-          </div>
-        </div>
+        <ProductImages images={product.images} />
         <div className="space-y-6">
           <div>
             <h1 className="text-3xl font-bold">{product.name}</h1>
