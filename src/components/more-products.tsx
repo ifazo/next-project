@@ -13,14 +13,14 @@ export default async function MoreProducts({
   currentProductId: string;
 }) {
   const res = await fetch(
-    `${process.env.BASE_URL}/api/products?shopName=${shopName}`,
+    `${process.env.BASE_URL}/api/products?shopNames=${shopName}`,
     {
       cache: "no-cache",
     }
   );
-  const products = await res.json();
+  const data = await res.json();
 
-  const filteredProducts = products.filter(
+  const filteredProducts = data.products.filter(
     (product: Product) => product.id !== currentProductId
   );
 
@@ -31,7 +31,7 @@ export default async function MoreProducts({
           More product from this shop
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {filteredProducts?.map((product: Product) => (
+          {filteredProducts.map((product: Product) => (
             <Card key={product.id} className="group overflow-hidden">
               <CardContent className="p-0">
                 <Link href={`/products/${product.id}`}>

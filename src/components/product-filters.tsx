@@ -1,15 +1,151 @@
-"use client";
+'use client'
 
-import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { useState, useEffect } from 'react'
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
+import { Slider } from "@/components/ui/slider"
+import { X } from 'lucide-react'
+import { Category, Shop } from '@prisma/client'
 
 export function ProductFilters() {
-  return (
-    <div className="flex items-center gap-2">
-      <div className="relative flex-1">
-        <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-        <Input placeholder="Search products..." className="pl-8" />
+  const [isOpen, setIsOpen] = useState(false)
+  const [priceRange, setPriceRange] = useState([0, 1000])
+  const [shops, setShops] = useState<Shop[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
+  const [selectedShops, setSelectedShops] = useState<string[]>([])
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    checkIsMobile()
+    window.addEventListener('resize', checkIsMobile)
+    return () => window.removeEventListener('resize', checkIsMobile)
+  }, [])
+
+  useEffect(() => {
+    const fetchFilters = async () => {
+      try {
+        const shopResponse = await fetch('/api/shops')
+        const categoryResponse = await fetch('/api/categories')
+        const shopData = await shopResponse.json()
+        const categoryData = await categoryResponse.json()
+        setShops(shopData)
+        setCategories(categoryData)
+      } catch (error) {
+        console.error('Error fetching filter data:', error)
+      }
+    }
+    fetchFilters()
+  }, [])
+
+  const handleShopChange = (shop: string) => {
+    setSelectedShops(prev =>
+      prev.includes(shop) ? prev.filter(s => s !== shop) : [...prev, shop]
+    )
+  }
+
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategories(prev =>
+      prev.includes(category) ? prev.filter(c => c !== category) : [...prev, category]
+    )
+  }
+
+  const applyFilters = () => {
+    console.log('Applying filters:', { priceRange, selectedShops, selectedCategories })
+    setIsOpen(false)
+  }
+
+  const FilterContent = () => (
+    <div className="space-y-6">
+      <div>
+        <h3 className="text-lg font-semibold mb-2">Price Range</h3>
+        <Slider
+          min={0}
+          max={1000}
+          step={10}
+          value={priceRange}
+          onValueChange={setPriceRange}
+          className="mb-2"
+        />
+        <div className="flex justify-between text-sm">
+          <span>${priceRange[0]}</span>
+          <span>${priceRange[1]}</span>
+        </div>
       </div>
+
+      <div>
+        <h3 className="text-lg font-semibold mb-2">Shops</h3>
+        {shops.map(shop => (
+          <div key={shop.id} className="flex items-center space-x-2 mb-2">
+            <Checkbox
+              id={`shop-${shop.id}`}
+              checked={selectedShops.includes(shop.name)}
+              onCheckedChange={() => handleShopChange(shop.name)}
+            />
+            <label htmlFor={`shop-${shop}`} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              {shop.name}
+            </label>
+          </div>
+        ))}
+      </div>
+
+      <div>
+        <h3 className="text-lg font-semibold mb-2">Categories</h3>
+        {categories.map(category => (
+          <div key={category.id} className="flex items-center space-x-2 mb-2">
+            <Checkbox
+              id={`category-${category.id}`}
+              checked={selectedCategories.includes(category.name)}
+              onCheckedChange={() => handleCategoryChange(category.name)}
+            />
+            <label htmlFor={`category-${category}`} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              {category.name}
+            </label>
+          </div>
+        ))}
+      </div>
+
+      <Button onClick={applyFilters} className="w-full">Apply Filters</Button>
     </div>
-  );
+  )
+
+  return (
+    <>
+      {isMobile ? (
+        <Sheet open={isOpen} onOpenChange={setIsOpen}>
+          <SheetTrigger asChild>
+            <Button variant="outline">Filter Products</Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-[300px] sm:w-[400px]">
+            <SheetHeader>
+              <SheetTitle>Filter Products</SheetTitle>
+              <SheetDescription>Adjust your product filters here.</SheetDescription>
+            </SheetHeader>
+            <FilterContent />
+          </SheetContent>
+        </Sheet>
+      ) : (
+        <div className="bg-background border rounded-lg p-6 w-[300px]">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold">Filters</h2>
+            <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+          <FilterContent />
+        </div>
+      )}
+    </>
+  )
 }

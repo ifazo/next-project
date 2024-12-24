@@ -31,12 +31,12 @@ export default async function CategoryPage({
   }
 
   const productsRes = await fetch(
-    `${process.env.BASE_URL}/api/products?categorySlug=${category.slug}`,
+    `${process.env.BASE_URL}/api/products?categorySlugs=${category.slug}`,
     {
       cache: "no-cache",
     }
   );
-  const products = await productsRes.json();
+  const data = await productsRes.json();
 
   return (
     <div className="container mx-auto py-10">
@@ -80,7 +80,7 @@ export default async function CategoryPage({
                 </span>
               </div>
               <div className="text-sm text-muted-foreground">
-                {products.length} Products
+                {data.totalProducts} Products
               </div>
             </div>
           </CardContent>
@@ -91,7 +91,7 @@ export default async function CategoryPage({
             Products in {category.name}
           </h2>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {products.map((product: Product) => (
+            {data.products.map((product: Product) => (
               <Card key={product.id}>
                 <CardHeader className="p-0">
                   <div className="relative h-48 w-full">
@@ -122,7 +122,7 @@ export default async function CategoryPage({
               </Card>
             ))}
           </div>
-          {products.length === 0 && (
+          {data.totalProducts === 0 && (
             <div className="text-center py-12">
               <Package className="h-12 w-12 mx-auto text-muted-foreground" />
               <h3 className="mt-4 text-xl font-semibold">No products found</h3>

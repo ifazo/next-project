@@ -11,6 +11,7 @@ export default async function ShopsPage() {
     cache: "no-cache",
   });
 const shops = await res.json();
+
   return (
     <div className="container mx-auto py-10">
       <div className="flex items-center justify-between mb-8">

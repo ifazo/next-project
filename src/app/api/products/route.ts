@@ -1,6 +1,81 @@
 import prisma from "@/lib/prisma";
 import { type NextRequest } from "next/server";
 
+export async function GET(request: NextRequest) {
+  try {
+    const searchParams = request.nextUrl.searchParams;
+    const search = searchParams.get("search") || "";
+    const page = Number(searchParams.get("page")) || 1;
+    const limit = parseInt(searchParams.get("limit") || "9");
+    const skip = (page - 1) * limit;
+    const shopNames = searchParams.get("shopNames")?.split(",") || []; 
+    const categorySlugs = searchParams.get("categorySlugs")?.split(",") || []; 
+    const minPrice = parseInt(searchParams.get("minPrice") || "0");
+    const maxPrice = parseInt(searchParams.get("maxPrice") || "1000");
+
+    const whereClause: {
+      OR?: (
+        | { name: { contains: string } }
+        | { description: { contains: string } }
+      )[];
+      shop?: { name: { in: string[] } };
+      category?: { slug: { in: string[] } };
+      price?: { gte: number; lte: number };
+    } = {};
+
+    if (search) {
+      whereClause.OR = [
+        { name: { contains: search } },
+        { description: { contains: search } },
+      ];
+    }
+    if (shopNames.length > 0) {
+      whereClause.shop = {
+        name: {
+          in: shopNames,
+        },
+      };
+    }
+    if (categorySlugs.length > 0) {
+      whereClause.category = {
+        slug: {
+          in: categorySlugs, 
+        },
+      };
+    }
+    if (minPrice || maxPrice) {
+      whereClause.price = {
+        gte: minPrice,
+        lte: maxPrice, 
+      };
+    }
+
+    const totalProducts = await prisma.product.count({
+      where: whereClause,
+    });
+
+    const products = await prisma.product.findMany({
+      where: whereClause,
+      take: limit,
+      skip: skip,
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return new Response(JSON.stringify({ products, totalProducts }), {
+      headers: { "content-type": "application/json" },
+    });
+  } catch (error) {
+    return new Response(
+      JSON.stringify({ error: "Error fetching products", details: error }),
+      {
+        headers: { "content-type": "application/json" },
+      }
+    );
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const role = request.headers.get("role");
@@ -28,85 +103,6 @@ export async function POST(request: Request) {
       JSON.stringify({ error: "Error creating product", details: error }),
       {
         status: 500,
-        headers: { "content-type": "application/json" },
-      }
-    );
-  }
-}
-
-export async function GET(request: NextRequest) {
-  try {
-    const searchParams = request.nextUrl.searchParams;
-    const q = searchParams.get("q") || "";
-    const shopName = searchParams.get("shopName") || "";
-    const categorySlug = searchParams.get("categorySlug") || "";
-    const limit = parseInt(searchParams.get("limit") || "12");
-    const skip = parseInt(searchParams.get("skip") || "0");
-    const sort = searchParams.get("sort") || "asc";
-    const price = parseInt(searchParams.get("price") || "0");
-
-    let products;
-
-    if (q) {
-      products = await prisma.product.findMany({
-        where: {
-          OR: [{ name: { contains: q } }, { description: { contains: q } }],
-        },
-        take: limit,
-        skip: skip,
-      });
-    } else if (shopName) {
-      products = await prisma.product.findMany({
-        where: {
-          shop: {
-            name: shopName,
-          },
-        },
-        take: limit,
-        skip: skip,
-      });
-    } else if (categorySlug) {
-      products = await prisma.product.findMany({
-        where: {
-          category: {
-            slug: categorySlug,
-          },
-        },
-        take: limit,
-        skip: skip,
-      });
-    } else if (price) {
-      products = await prisma.product.findMany({
-        where: {
-          price: {
-            lte: price,
-          },
-        },
-        take: limit,
-        skip: skip,
-      });
-    } else if (sort) {
-      products = await prisma.product.findMany({
-        orderBy: {
-          name: sort === "asc" ? "asc" : "desc",
-        },
-        take: limit,
-        skip: skip,
-      });
-    } else {
-      products = await prisma.product.findMany({
-        take: limit,
-        skip: skip,
-      });
-    }
-
-    return new Response(JSON.stringify(products), {
-      headers: { "content-type": "application/json" },
-    });
-  } catch (error) {
-    return new Response(
-      JSON.stringify({ error: "Error fetching products", details: error }),
-      {
         headers: { "content-type": "application/json" },
       }
     );

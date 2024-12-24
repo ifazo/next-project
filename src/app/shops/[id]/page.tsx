@@ -31,12 +31,12 @@ export default async function ShopPage({
   }
 
   const productsRes = await fetch(
-    `${process.env.BASE_URL}/api/products?shopName=${shop.name}`,
+    `${process.env.BASE_URL}/api/products?shopNames=${shop.name}`,
     {
       cache: "no-cache",
     }
   );
-  const products = await productsRes.json();
+  const data = await productsRes.json();
 
   return (
     <div className="container mx-auto py-10">
@@ -87,7 +87,7 @@ export default async function ShopPage({
         <div className="lg:col-span-2">
           <h2 className="text-2xl font-bold mb-6">Products</h2>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {products.map((product: Product) => (
+            {data.products.map((product: Product) => (
               <Card key={product.id}>
                 <CardHeader className="p-0">
                   <div className="relative h-48 w-full">
@@ -118,7 +118,7 @@ export default async function ShopPage({
               </Card>
             ))}
           </div>
-          {products.length === 0 && (
+          {data.totalProducts === 0 && (
             <div className="text-center py-12">
               <Package className="h-12 w-12 mx-auto text-muted-foreground" />
               <h3 className="mt-4 text-xl font-semibold">No products found</h3>
