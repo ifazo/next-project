@@ -149,7 +149,9 @@ export function CartModal() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-sm">Total</span>
-                  <span className="text-sm font-bold">${cartTotal}</span>
+                  <span className="text-sm font-bold">
+                    ${cartTotal.toFixed(2)}
+                  </span>
                 </div>
               </div>
               <Button className="w-full" onClick={handleCheckout}>

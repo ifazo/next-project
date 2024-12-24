@@ -13,17 +13,18 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { ProductFilters } from "./product-filters";
 
 export function PaginatedProducts() {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
   const [totalProducts, setTotalProducts] = useState(0);
-  const totalPages = Math.ceil(totalProducts / 9);
+  const totalPages = Math.ceil(totalProducts / 6);
 
   const fetchProducts = async (page: number) => {
-    const res = await fetch(`/api/products?page=${page}&limit=9`);
+    const res = await fetch(`/api/products?page=${page}&limit=6`);
     const data = await res.json();
     setProducts(data.products);
     setTotalProducts(data.totalProducts);
@@ -43,7 +44,11 @@ export function PaginatedProducts() {
   };
 
   return (
-    <>
+    <div className="flex flex-col md:flex-row gap-8">
+            <aside className="w-full md:w-1/4">
+              <ProductFilters setProducts={setProducts} setTotalProducts={setTotalProducts} />
+            </aside>
+    <div className="w-full md:w-3/4">
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {products.map((product: Product) => (
           <ProductCard key={product.id} product={product} />
@@ -90,6 +95,7 @@ export function PaginatedProducts() {
           </PaginationItem>
         </PaginationContent>
       </Pagination>
-    </>
+    </div>
+  </div>
   );
 }

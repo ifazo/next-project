@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-import { ProductFilters } from "@/components/product-filters";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PaginatedProducts } from "@/components/paginated-products";
 
@@ -28,16 +27,9 @@ export default async function ProductsPage() {
           Browse our collection of premium products.
         </p>
       </div>
-      <div className="flex flex-col md:flex-row gap-8">
-        <aside className="w-full md:w-1/4">
-          <ProductFilters />
-        </aside>
-        <main className="w-full md:w-3/4">
-          <Suspense fallback={<ProductsLoading />}>
-            <PaginatedProducts />
-          </Suspense>
-        </main>
-      </div>
+      <Suspense fallback={<ProductsLoading />}>
+        <PaginatedProducts />
+      </Suspense>
     </div>
   );
 }

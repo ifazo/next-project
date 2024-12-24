@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const search = searchParams.get("search") || "";
     const page = Number(searchParams.get("page")) || 1;
-    const limit = parseInt(searchParams.get("limit") || "9");
+    const limit = parseInt(searchParams.get("limit") || "6");
     const skip = (page - 1) * limit;
     const shopNames = searchParams.get("shopNames")?.split(",") || []; 
     const categorySlugs = searchParams.get("categorySlugs")?.split(",") || []; 
