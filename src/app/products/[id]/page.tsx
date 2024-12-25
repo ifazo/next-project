@@ -38,8 +38,6 @@ export default async function ProductPage({
           </div>
           <div className="space-y-2">
             <div className="text-3xl font-bold">${product.price}</div>
-            {/* <div className="text-sm text-gray-600 line-through">${product.price}</div> */}
-            {/* <div className="text-sm font-medium text-green-600">You save $30.01 (25%)</div> */}
           </div>
           <Separator />
           <VariantQuantitySelector product={product} />

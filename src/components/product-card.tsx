@@ -1,24 +1,24 @@
-"use client";
+'use client'
 
-import Image from "next/image";
-import Link from "next/link";
-import { Eye, Heart } from "lucide-react";
+import Image from 'next/image'
+import Link from 'next/link'
+import { Eye, Heart } from 'lucide-react'
 
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Product } from "@prisma/client";
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Product } from '@prisma/client'
+import { ProductQuickView } from './product-quickview'
+import { useToast } from '@/hooks/use-toast'
 
 export function ProductCard({ product }: { product: Product }) {
-  
+  const { toast } = useToast();
   const handleAddToWishlist = () => {
-    console.log("Add to wishlist");
-  };
+    toast({
+      title: "Success",
+      description: "Product added to wishlist",
+    });
+  }
 
   return (
     <Card className="group relative overflow-hidden">
@@ -34,14 +34,16 @@ export function ProductCard({ product }: { product: Product }) {
             />
           </div>
         </Link>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="absolute right-2 top-2 opacity-0 transition-opacity group-hover:opacity-100"
-        >
-          <Eye className="h-5 w-5" />
-          <span className="sr-only">Add to wishlist</span>
-        </Button>
+        <ProductQuickView product={product}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute right-2 top-2 opacity-0 transition-opacity group-hover:opacity-100"
+          >
+            <Eye className="h-5 w-5" />
+            <span className="sr-only">Quick view</span>
+          </Button>
+        </ProductQuickView>
         {product.stock === 0 && (
           <Badge variant="destructive" className="absolute left-2 top-2">
             Out of Stock
@@ -52,7 +54,7 @@ export function ProductCard({ product }: { product: Product }) {
             Low Stock
           </Badge>
         )}
-        {product.stock > 50 && (
+        {product.stock >= 50 && (
           <Badge variant="secondary" className="absolute left-2 top-2">
             In Stock
           </Badge>
@@ -62,17 +64,12 @@ export function ProductCard({ product }: { product: Product }) {
         <div className="flex items-center justify-between">
           <div>
             <h3 className="font-semibold">
-            {product.name.length > 15 ? `${product.name.slice(0, 20)}...` : product.name}
+              {product.name.length > 15 ? `${product.name.slice(0, 20)}...` : product.name}
             </h3>
             <p className="text-sm text-muted-foreground">{product.shopName}</p>
           </div>
           <div className="text-right">
             <div className="font-semibold">${product.price.toFixed(2)}</div>
-            {/* {product.originalPrice && (
-              <div className="text-sm text-muted-foreground line-through">
-                ${product.originalPrice.toFixed(2)}
-              </div>
-            )} */}
           </div>
         </div>
       </CardContent>
@@ -83,5 +80,6 @@ export function ProductCard({ product }: { product: Product }) {
         </Button>
       </CardFooter>
     </Card>
-  );
+  )
 }
+

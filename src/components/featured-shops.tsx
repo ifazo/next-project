@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Shop } from "@prisma/client";
 
-export async function FeaturedShops() {
+export default async function FeaturedShops() {
   const res = await fetch(`${process.env.BASE_URL}/api/shops/random`, {
     cache: "no-cache",
   });
