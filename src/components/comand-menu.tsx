@@ -1,10 +1,10 @@
 "use client";
 
 import * as React from "react";
-// import { useRouter } from "next/navigation"
 import { type DialogProps } from "@radix-ui/react-dialog";
 import { Laptop, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
+import Image from "next/image";
 
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
@@ -17,10 +17,14 @@ import {
   CommandList,
   CommandSeparator,
 } from "./ui/command";
+import { Product } from "@prisma/client";
+import Link from "next/link";
 
 export function CommandMenu({ ...props }: DialogProps) {
-  //   const router = useRouter()
   const [open, setOpen] = React.useState(false);
+  const [search, setSearch] = React.useState("");
+  const [products, setProducts] = React.useState<Product[]>([]);
+  const [totalProducts, setTotalProducts] = React.useState(0);
   const { setTheme } = useTheme();
 
   React.useEffect(() => {
@@ -44,6 +48,31 @@ export function CommandMenu({ ...props }: DialogProps) {
     return () => document.removeEventListener("keydown", down);
   }, []);
 
+  React.useEffect(() => {
+    const fetchProducts = async () => {
+      if (search.trim() === "") {
+        setProducts([]);
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `/api/products?search=${encodeURIComponent(search)}`
+        );
+        if (!response.ok) throw new Error("Failed to fetch products");
+        const data = await response.json();
+        setProducts(data.products);
+        setTotalProducts(data.totalProducts);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+        setProducts([]);
+      }
+    };
+
+    const debounce = setTimeout(fetchProducts, 300);
+    return () => clearTimeout(debounce);
+  }, [search]);
+
   const runCommand = React.useCallback((command: () => unknown) => {
     setOpen(false);
     command();
@@ -66,37 +95,51 @@ export function CommandMenu({ ...props }: DialogProps) {
         </kbd>
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="Type a command or search..." />
+        <CommandInput
+          placeholder="Type products name..."
+          value={search}
+          onValueChange={setSearch}
+        />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading="Links">
-            {/* {mainNav
-              .filter((navitem) => !navitem.external)
-              .map((navItem) => (
-                <CommandItem
-                  key={navItem.href}
-                  value={navItem.title}
-                  onSelect={() => {
-                    runCommand(() => router.push(navItem.href as string));
-                  }}
-                >
-                  <File />
-                  {navItem.title}
-                </CommandItem>
-              ))} */}
+          <CommandGroup heading={`Results ${totalProducts} products found`}>
+            {products.map((product) => (
+              <CommandItem
+                key={product.id}
+                value={product.name}
+                onSelect={() => {
+                  // Handle product selection here
+                  console.log("Selected product:", product);
+                  setOpen(false);
+                }}
+              >
+                <Link href={`/products/${product.id}`}>
+                  <div className="flex items-center space-x-2">
+                    <Image
+                      src={product.images[0]}
+                      alt={product.name}
+                      width={24}
+                      height={24}
+                      className="rounded-sm object-cover"
+                    />
+                    <span>{product.name}</span>
+                  </div>
+                </Link>
+              </CommandItem>
+            ))}
           </CommandGroup>
           <CommandSeparator />
           <CommandGroup heading="Theme">
             <CommandItem onSelect={() => runCommand(() => setTheme("light"))}>
-              <Sun />
+              <Sun className="mr-2 h-4 w-4" />
               Light
             </CommandItem>
             <CommandItem onSelect={() => runCommand(() => setTheme("dark"))}>
-              <Moon />
+              <Moon className="mr-2 h-4 w-4" />
               Dark
             </CommandItem>
             <CommandItem onSelect={() => runCommand(() => setTheme("system"))}>
-              <Laptop />
+              <Laptop className="mr-2 h-4 w-4" />
               System
             </CommandItem>
           </CommandGroup>

@@ -8,26 +8,20 @@ export async function GET(request: NextRequest) {
     const page = Number(searchParams.get("page")) || 1;
     const limit = parseInt(searchParams.get("limit") || "6");
     const skip = (page - 1) * limit;
-    const shopNames = searchParams.get("shopNames")?.split(",") || []; 
-    const categorySlugs = searchParams.get("categorySlugs")?.split(",") || []; 
+    const shopNames = searchParams.get("shopNames")?.split(",") || [];
+    const categorySlugs = searchParams.get("categorySlugs")?.split(",") || [];
     const minPrice = parseInt(searchParams.get("minPrice") || "0");
     const maxPrice = parseInt(searchParams.get("maxPrice") || "1000");
 
     const whereClause: {
-      OR?: (
-        | { name: { contains: string } }
-        | { description: { contains: string } }
-      )[];
+      name?: { contains: string; mode: "insensitive" };
       shop?: { name: { in: string[] } };
       category?: { slug: { in: string[] } };
       price?: { gte: number; lte: number };
     } = {};
 
     if (search) {
-      whereClause.OR = [
-        { name: { contains: search } },
-        { description: { contains: search } },
-      ];
+      whereClause.name = { contains: search, mode: "insensitive" };
     }
     if (shopNames.length > 0) {
       whereClause.shop = {
@@ -39,14 +33,14 @@ export async function GET(request: NextRequest) {
     if (categorySlugs.length > 0) {
       whereClause.category = {
         slug: {
-          in: categorySlugs, 
+          in: categorySlugs,
         },
       };
     }
     if (minPrice || maxPrice) {
       whereClause.price = {
         gte: minPrice,
-        lte: maxPrice, 
+        lte: maxPrice,
       };
     }
 

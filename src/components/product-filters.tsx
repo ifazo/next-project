@@ -122,7 +122,7 @@ export function ProductFilters({
       >
         Clear All Filters
       </Button>
-      <div className="space-y-6 max-h-[calc(100vh-200px)] overflow-y-auto pr-4">
+      <div className="space-y-6 max-h-[calc(100vh-220px)] overflow-y-auto pr-4">
         <div>
           <h3 className="text-lg font-semibold mb-2">Price Range</h3>
           <Slider
@@ -177,7 +177,7 @@ export function ProductFilters({
           ))}
         </div>
       </div>
-      <Button onClick={() => applyFilters()} className="w-full">
+      <Button onClick={() => applyFilters()} className="w-full mt-4">
         Apply Filters
       </Button>
     </>
