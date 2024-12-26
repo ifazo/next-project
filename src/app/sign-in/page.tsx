@@ -17,8 +17,6 @@ import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-// import { useAppDispatch } from "@/store/hook";
-// import { setUser } from "@/store/features/userSlice";
 
 type Inputs = {
   email: string;
@@ -28,7 +26,6 @@ type Inputs = {
 export default function SignIn() {
   const { toast } = useToast();
   const router = useRouter();
-  // const dispatch = useAppDispatch();
 
   const {
     register,
@@ -51,7 +48,7 @@ export default function SignIn() {
             title: "Success",
             description: `Sign in with ${data.email}`,
           });
-          router.push("/");
+          router.push("/dashboard");
         }
       })
       .catch((error) => {
@@ -66,11 +63,11 @@ export default function SignIn() {
   const handleGoogleSignIn = async () => {
     await signIn("google", { callbackUrl: "/" })
       .then(() => {
-        // dispatch(setUser(session?.user));
         toast({
           title: "Success",
           description: "Sign in with Google",
         });
+        router.push("/dashboard");
       })
       .catch((error) => {
         toast({
@@ -84,11 +81,11 @@ export default function SignIn() {
   const handleGitHubSignIn = async () => {
     await signIn("github", { callbackUrl: "/" })
       .then(() => {
-        // dispatch(setUser(session?.user));
         toast({
           title: "Success",
           description: "Sign in with Github",
         });
+        router.push("/dashboard");
       })
       .catch((error) => {
         toast({
