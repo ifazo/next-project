@@ -5,6 +5,7 @@ import { store } from "@/store/store";
 import { SessionProvider } from "next-auth/react";
 import { Navbar } from "@/components/navbar";
 import { usePathname } from "next/navigation";
+import { Footer } from "@/components/footer";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -15,6 +16,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       {!isDashboard && <Navbar />}
         {children}
         </Provider>
+        {!isDashboard && <Footer />}
     </SessionProvider>
   );
 }
