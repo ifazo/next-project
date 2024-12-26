@@ -78,13 +78,13 @@ const sellerNav = [
 
 const buyerNav = [
   {
-    title: "User",
-    url: "/dashboard/user",
+    title: "Buyer",
+    url: "/dashboard/buyer",
     icon: BookOpen,
     items: [
-      { title: "Cart", url: "/dashboard/user/cart" },
-      { title: "Orders", url: "/dashboard/user/orders" },
-      { title: "Wishlist", url: "/dashboard/user/wishlist" },
+      { title: "Wishlist", url: "/dashboard/buyer/wishlist" },
+      { title: "Orders", url: "/dashboard/buyer/orders" },
+      { title: "Following", url: "/dashboard/buyer/following" },
     ],
   },
   {
@@ -102,17 +102,17 @@ const buyerNav = [
 
 const shop = [
   {
-    name: "Acme Inc",
+    name: "Ifaz Inc",
     logo: GalleryVerticalEnd,
     plan: "Enterprise",
   },
   {
-    name: "Acme Corp.",
+    name: "Ifaz Corp.",
     logo: AudioWaveform,
     plan: "Startup",
   },
   {
-    name: "Evil Corp.",
+    name: "Ifaz Org.",
     logo: Command,
     plan: "Free",
   },
@@ -133,6 +133,11 @@ const HomeNav = [
     name: "Shops",
     url: "/shops",
     icon: Map,
+  },
+  {
+    name: "Categories",
+    url: "/categories",
+    icon: PieChart,
   },
 ];
 

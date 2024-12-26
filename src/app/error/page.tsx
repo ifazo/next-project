@@ -1,6 +1,3 @@
-"use client";
-
-import { useSearchParams } from "next/navigation";
 import { AlertTriangle } from "lucide-react";
 import Link from "next/link";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -15,9 +12,6 @@ import {
 } from "@/components/ui/card";
 
 export default function ErrorPage() {
-  const searchParams = useSearchParams();
-  const error = searchParams.get("error");
-
   return (
     <div className="container flex items-center justify-center min-h-screen p-4">
       <Card className="w-full max-w-md">
@@ -34,7 +28,7 @@ export default function ErrorPage() {
             <AlertTriangle className="h-4 w-4" />
             <AlertTitle>Error</AlertTitle>
             <AlertDescription>
-              {error || "An unexpected error occurred. Please try again later."}
+              An unexpected error occurred. Please try again later.
             </AlertDescription>
           </Alert>
         </CardContent>

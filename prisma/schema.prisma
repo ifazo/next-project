@@ -14,19 +14,20 @@ enum Role {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String     @id @default(cuid())
   name          String?
   image         String?
-  role          Role      @default(buyer)
-  email         String    @unique
-  emailVerified DateTime? @map("email_verified")
+  role          Role       @default(buyer)
+  email         String     @unique
+  emailVerified DateTime?  @map("email_verified")
   password      String?
   accounts      Account[]
   sessions      Session[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
   reviews       Review[]
   shop          Shop?
+  Wishlist      Wishlist[]
 
   @@map("users")
 }
@@ -99,21 +100,22 @@ model Shop {
 }
 
 model Product {
-  id             String   @id @default(uuid())
-  name           String   @unique
+  id             String     @id @default(uuid())
+  name           String     @unique
   images         String[]
   variants       String[]
   price          Float
   stock          Int
   description    String
   specifications String[]
-  shopName       String   @map("shop_name")
-  categorySlug   String   @map("category_slug")
-  shop           Shop     @relation(fields: [shopName], references: [name])
-  category       Category @relation(fields: [categorySlug], references: [slug])
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  shopName       String     @map("shop_name")
+  categorySlug   String     @map("category_slug")
+  shop           Shop       @relation(fields: [shopName], references: [name])
+  category       Category   @relation(fields: [categorySlug], references: [slug])
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
   reviews        Review[]
+  Wishlist       Wishlist[]
 
   @@map("products")
 }
@@ -130,4 +132,16 @@ model Review {
   updatedAt DateTime @updatedAt
 
   @@map("reviews")
+}
+
+model Wishlist {
+  id        String   @id @default(uuid())
+  productId String   @map("product_id")
+  userEmail String   @map("user_email")
+  product   Product  @relation(fields: [productId], references: [id])
+  user      User     @relation(fields: [userEmail], references: [email])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("wishlists")
 }
