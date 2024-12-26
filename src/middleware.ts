@@ -1,15 +1,15 @@
-import { getToken } from "next-auth/jwt";
 import NextAuth from "next-auth";
 import authConfig from "./auth.config";
 import { NextRequest, NextResponse } from "next/server";
+import { AuthSession, auth as localAuth } from "./auth";
 
 const { auth } = NextAuth(authConfig);
 
 export default auth(async function middleware(req: NextRequest) {
-    const token = await getToken({ req, secret: process.env.AUTH_SECRET });
-    const role = token?.role;
+    const session = await localAuth();
+    const role = (session as AuthSession).role;
 
-    if (!token) {
+    if (!session) {
         return NextResponse.redirect(new URL('/sign-in', req.url));
     }
 
@@ -22,10 +22,6 @@ export default auth(async function middleware(req: NextRequest) {
     if (pathname.startsWith('/dashboard/admin') && role !== 'admin') {
         return NextResponse.redirect(new URL('/sign-in', req.url));
     }
-
-    // if (pathname.startsWith('/dashboard') && !['buyer', 'seller', 'admin'].includes(role)) {
-    //     return NextResponse.redirect(new URL('/sign-in', req.url));
-    // }
 
     return NextResponse.next();
 });

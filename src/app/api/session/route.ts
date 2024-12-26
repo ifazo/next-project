@@ -1,12 +1,12 @@
-import { getToken } from "next-auth/jwt";
+import { auth } from "@/auth";
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
-    const token = await getToken({ req, secret: process.env.AUTH_SECRET });
-    if (!token) {
+    const session = await auth();
+    if (!session) {
       return new Response("Unauthorized", { status: 401 });
     }
-    return new Response(JSON.stringify(token), {
+    return new Response(JSON.stringify(session), {
       headers: { "content-type": "application/json" },
     });
   } catch (error) {

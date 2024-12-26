@@ -1,7 +1,3 @@
-import React from 'react'
-
-export default function AdminPage() {
-  return (
-    <div>Admin page</div>
-  )
+export default async function SellerPage() {
+  return <div>Admin page</div>;
 }
