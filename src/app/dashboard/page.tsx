@@ -1,4 +1,4 @@
-export default function DashboardPage() {
+export default async function DashboardPage() {
   return (
     <div>
       <div className="flex flex-1 flex-col gap-4 p-4 pt-0">

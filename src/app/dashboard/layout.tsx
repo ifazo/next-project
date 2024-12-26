@@ -1,5 +1,4 @@
 import "../../app/globals.css";
-import type { Metadata } from "next";
 import { Playfair_Display } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
@@ -20,6 +19,9 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { auth, AuthSession } from "@/auth";
+import { redirect } from "next/navigation";
+import { User } from "next-auth";
 
 const playfairDisplay = Playfair_Display({
   subsets: ["latin"],
@@ -28,16 +30,17 @@ const playfairDisplay = Playfair_Display({
   style: ["normal", "italic"],
 });
 
-export const metadata: Metadata = {
-  title: "Ifaz Next App",
-  description: "Created by ziaul karim ifaz",
-};
-
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+    if (!session) {
+      redirect("/sign-in");
+    }
+    const user = session?.user as User;
+    const role = (session as AuthSession).role;
   return (
     <html lang="en">
       <Providers>
@@ -45,7 +48,7 @@ export default function DashboardLayout({
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <Toaster />
             <SidebarProvider>
-              <AppSidebar />
+              <AppSidebar user={user} role={role} />
               <SidebarInset>
                 <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
                   <div className="flex items-center gap-2 px-4">
