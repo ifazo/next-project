@@ -36,11 +36,11 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }>) {
   const session = await auth();
-    if (!session) {
-      redirect("/sign-in");
-    }
-    const user = session?.user as User;
-    const role = (session as AuthSession).role;
+  if (!session) {
+    redirect("/sign-in");
+  }
+  const user = session?.user as User;
+  const role = (session as AuthSession).role;
   return (
     <html lang="en">
       <Providers>

@@ -7,11 +7,12 @@ const { auth } = NextAuth(authConfig);
 
 export default auth(async function middleware(req: NextRequest) {
     const session = await localAuth();
-    const role = (session as AuthSession).role;
-
+    
     if (!session) {
         return NextResponse.redirect(new URL('/sign-in', req.url));
     }
+
+    const role = (session as AuthSession)?.role;
 
     const pathname = req.nextUrl.pathname;
 
