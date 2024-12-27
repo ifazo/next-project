@@ -16,8 +16,8 @@ import {
 } from "@/components/ui/sidebar";
 import { NavUser } from "./nav-user";
 import { User } from "next-auth";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 
 const adminNav = [
   {
@@ -49,6 +49,24 @@ const adminNav = [
       },
     ],
   },
+  {
+    title: "Settings",
+    url: "/dashboard/settings",
+    items: [
+      {
+        title: "Profile",
+        url: "/dashboard/settings/profile",
+      },
+      {
+        title: "Account",
+        url: "/dashboard/settings/account",
+      },
+      {
+        title: "Notifications",
+        url: "/dashboard/settings/notifications",
+      },
+    ],
+  },
 ];
 
 const sellerNav = [
@@ -69,15 +87,33 @@ const sellerNav = [
   },
   {
     title: "Products",
-    url: "/products",
+    url: "/dashboard/seller/products",
     items: [
       {
         title: "All Products",
-        url: "/products",
+        url: "/dashboard/seller/products",
       },
       {
         title: "Add Product",
-        url: "/products/add",
+        url: "/dashboard/seller/products/add",
+      },
+    ],
+  },
+  {
+    title: "Settings",
+    url: "/dashboard/settings",
+    items: [
+      {
+        title: "Profile",
+        url: "/dashboard/settings/profile",
+      },
+      {
+        title: "Account",
+        url: "/dashboard/settings/account",
+      },
+      {
+        title: "Notifications",
+        url: "/dashboard/settings/notifications",
       },
     ],
   },
@@ -100,12 +136,30 @@ const buyerNav = [
     ],
   },
   {
-    title: "Products",
-    url: "/products",
+    title: "Wishlist",
+    url: "/dashboard/buyer/wishlist",
     items: [
       {
-        title: "All Products",
-        url: "/products",
+        title: "Products",
+        url: "/dashboard/buyer/wishlist",
+      },
+    ],
+  },
+  {
+    title: "Settings",
+    url: "/dashboard/settings",
+    items: [
+      {
+        title: "Profile",
+        url: "/dashboard/settings/profile",
+      },
+      {
+        title: "Account",
+        url: "/dashboard/settings/account",
+      },
+      {
+        title: "Notifications",
+        url: "/dashboard/settings/notifications",
       },
     ],
   },
@@ -139,9 +193,9 @@ export function AppSidebar({ user, role }: { user: User; role: string }) {
             {navMain.map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton asChild>
-                  <a href={item.url} className="font-medium">
+                  <Link href={item.url} className="font-medium">
                     {item.title}
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
                 {item.items?.length ? (
                   <SidebarMenuSub>

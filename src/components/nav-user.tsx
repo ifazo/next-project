@@ -28,6 +28,7 @@ import {
 import { User } from "next-auth";
 import { useToast } from "@/hooks/use-toast";
 import { signOut } from "next-auth/react";
+import Link from "next/link";
 
 export function NavUser({ user }: { user: User }) {
   const { isMobile } = useSidebar();
@@ -82,27 +83,35 @@ export function NavUser({ user }: { user: User }) {
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <Sparkles />
-                Upgrade to Pro
+                <Link href="/dashboard/settings" className="flex items-center gap-2">
+                  <Sparkles />
+                  Settings
+                </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <BadgeCheck />
-                Account
+                <Link href="/dashboard/settings/profile" className="flex items-center gap-2">
+                  <BadgeCheck />
+                  Profile
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <CreditCard />
-                Billing
+                <Link href="/dashboard/settings/account" className="flex items-center gap-2">
+                  <CreditCard />
+                  Account
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <Bell />
-                Notifications
+                <Link href="/dashboard/settings/notifications" className="flex items-center gap-2">
+                  <Bell />
+                  Notifications
+                </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleSignOut}>
+            <DropdownMenuItem onClick={handleSignOut} className="text-destructive bg-destructive-foreground">
               <LogOut />
               Log out
             </DropdownMenuItem>
