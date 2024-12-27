@@ -1,158 +1,163 @@
-"use client";
-
 import * as React from "react";
-import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  Map,
-  PieChart,
-  Settings2,
-  SquareTerminal,
-} from "lucide-react";
 
-import { NavMain } from "@/components/nav-main";
-import { NavProjects } from "@/components/nav-projects";
-import { NavUser } from "@/components/nav-user";
-import { TeamSwitcher } from "@/components/team-switcher";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
+  SidebarGroup,
   SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { NavUser } from "./nav-user";
 import { User } from "next-auth";
+import Link from "next/link";
+import Image from "next/image";
 
 const adminNav = [
   {
-    title: "Admin",
+    title: "Dashboard",
     url: "/dashboard/admin",
-    icon: SquareTerminal,
-    isActive: true,
     items: [
-      { title: "Users", url: "/dashboard/admin/users" },
-      { title: "Shops", url: "/dashboard/admin/shops" },
-      { title: "Category", url: "/dashboard/admin/categories" },
+      {
+        title: "Overview",
+        url: "/dashboard/admin",
+        isActive: true,
+      },
+      {
+        title: "Analytics",
+        url: "/dashboard/admin/analytics",
+      },
     ],
   },
   {
-    title: "Settings",
-    url: "/dashboard/settings",
-    icon: Settings2,
+    title: "Products",
+    url: "/products",
     items: [
-      { title: "Profile", url: "/dashboard/settings/profile" },
-      { title: "Team", url: "#" },
-      { title: "Billing", url: "#" },
-      { title: "Limits", url: "#" },
+      {
+        title: "All Products",
+        url: "/products",
+      },
+      {
+        title: "Add Product",
+        url: "/products/add",
+      },
     ],
   },
 ];
 
 const sellerNav = [
   {
-    title: "Seller",
+    title: "Dashboard",
     url: "/dashboard/seller",
-    icon: Bot,
     items: [
-      { title: "Shops", url: "/dashboard/seller/shops" },
-      { title: "Products", url: "/dashboard/seller/products/add" },
-      { title: "Revenue", url: "/dashboard/seller/revenue" },
+      {
+        title: "Overview",
+        url: "/dashboard/seller",
+        isActive: true,
+      },
+      {
+        title: "Analytics",
+        url: "/dashboard/seller/analytics",
+      },
     ],
   },
   {
-    title: "Settings",
-    url: "/dashboard/settings",
-    icon: Settings2,
+    title: "Products",
+    url: "/products",
     items: [
-      { title: "Profile", url: "/dashboard/settings/profile" },
-      { title: "Team", url: "#" },
-      { title: "Billing", url: "#" },
-      { title: "Limits", url: "#" },
+      {
+        title: "All Products",
+        url: "/products",
+      },
+      {
+        title: "Add Product",
+        url: "/products/add",
+      },
     ],
   },
 ];
 
 const buyerNav = [
   {
-    title: "Buyer",
-    url: "/dashboard/buyer",
-    icon: BookOpen,
+    title: "Dashboard",
+    url: "/dashboard",
     items: [
-      { title: "Wishlist", url: "/dashboard/buyer/wishlist" },
-      { title: "Orders", url: "/dashboard/buyer/orders" },
-      { title: "Following", url: "/dashboard/buyer/following" },
+      {
+        title: "Overview",
+        url: "/dashboard",
+        isActive: true,
+      },
+      {
+        title: "Analytics",
+        url: "/dashboard/analytics",
+      },
     ],
   },
   {
-    title: "Settings",
-    url: "/dashboard/settings",
-    icon: Settings2,
-    items: [
-      { title: "Profile", url: "/dashboard/settings/profile" },
-      { title: "Team", url: "#" },
-      { title: "Billing", url: "#" },
-      { title: "Limits", url: "#" },
-    ],
-  },
-];
-
-const shop = [
-  {
-    name: "Ifaz Inc",
-    logo: GalleryVerticalEnd,
-    plan: "Enterprise",
-  },
-  {
-    name: "Ifaz Corp.",
-    logo: AudioWaveform,
-    plan: "Startup",
-  },
-  {
-    name: "Ifaz Org.",
-    logo: Command,
-    plan: "Free",
-  },
-];
-
-const HomeNav = [
-  {
-    name: "Home",
-    url: "/",
-    icon: Frame,
-  },
-  {
-    name: "Products",
+    title: "Products",
     url: "/products",
-    icon: PieChart,
-  },
-  {
-    name: "Shops",
-    url: "/shops",
-    icon: Map,
-  },
-  {
-    name: "Categories",
-    url: "/categories",
-    icon: PieChart,
+    items: [
+      {
+        title: "All Products",
+        url: "/products",
+      },
+    ],
   },
 ];
 
 export function AppSidebar({ user, role }: { user: User; role: string }) {
-  console.log("User role", role);
-  const navItems =
+  const navMain =
     role === "admin" ? adminNav : role === "seller" ? sellerNav : buyerNav;
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar>
       <SidebarHeader>
-        <TeamSwitcher teams={shop} />
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton size="lg" asChild>
+              <Link href="/">
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-secondary text-sidebar-primary-foreground">
+                  <Image height={24} width={24} src="/logo.png" alt="logo" />
+                </div>
+                <div className="flex flex-col gap-0.5 leading-none">
+                  <span className="font-semibold">Ifaz.next</span>
+                  <span className="">{role}</span>
+                </div>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={navItems} />
-        <NavProjects projects={HomeNav} />
+        <SidebarGroup>
+          <SidebarMenu>
+            {navMain.map((item) => (
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton asChild>
+                  <a href={item.url} className="font-medium">
+                    {item.title}
+                  </a>
+                </SidebarMenuButton>
+                {item.items?.length ? (
+                  <SidebarMenuSub>
+                    {item.items.map((item) => (
+                      <SidebarMenuSubItem key={item.title}>
+                        <SidebarMenuSubButton asChild isActive={item.isActive}>
+                          <a href={item.url}>{item.title}</a>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                    ))}
+                  </SidebarMenuSub>
+                ) : null}
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={user} />

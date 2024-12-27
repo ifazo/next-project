@@ -48,7 +48,7 @@ export default function SignIn() {
             title: "Success",
             description: `Sign in with ${data.email}`,
           });
-          router.push("/dashboard");
+          router.push("/");
         }
       })
       .catch((error) => {
@@ -67,7 +67,6 @@ export default function SignIn() {
           title: "Success",
           description: "Sign in with Google",
         });
-        router.push("/dashboard");
       })
       .catch((error) => {
         toast({
@@ -85,7 +84,6 @@ export default function SignIn() {
           title: "Success",
           description: "Sign in with Github",
         });
-        router.push("/dashboard");
       })
       .catch((error) => {
         toast({
@@ -132,7 +130,7 @@ export default function SignIn() {
               <Input
                 id="email"
                 type="email"
-                placeholder="mail@example.com"
+                placeholder="example@mail.com"
                 {...register("email", { required: true })}
               />
               {errors.email && <span>Email is required</span>}

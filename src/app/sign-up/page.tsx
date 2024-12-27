@@ -85,12 +85,11 @@ export default function SignUp() {
                 type="radio"
                 value="buyer"
                 id="buyer"
-                className="hidden" // Hide the actual input
+                className="hidden" 
               />
               Buyer
             </label>
 
-            {/* Seller Radio Button */}
             <label
               htmlFor="seller"
               className={`flex items-center justify-center p-1 border rounded-lg cursor-pointer ${
@@ -104,7 +103,7 @@ export default function SignUp() {
                 type="radio"
                 value="seller"
                 id="seller"
-                className="hidden" // Hide the actual input
+                className="hidden"
               />
               Seller
             </label>
@@ -128,7 +127,7 @@ export default function SignUp() {
               <Input
                 id="name"
                 type="name"
-                placeholder="Full name"
+                placeholder="Your name"
                 {...register("name", { required: true })}
               />
               {errors.name && <span>Name is required</span>}
@@ -138,7 +137,7 @@ export default function SignUp() {
               <Input
                 id="email"
                 type="email"
-                placeholder="mail@example.com"
+                placeholder="example@mail.com"
                 {...register("email", { required: true })}
               />
               {errors.email && <span>Email is required</span>}
