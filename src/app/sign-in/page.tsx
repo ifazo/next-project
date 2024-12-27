@@ -16,7 +16,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 
 type Inputs = {
   email: string;
@@ -25,7 +25,7 @@ type Inputs = {
 
 export default function SignIn() {
   const { toast } = useToast();
-  const router = useRouter();
+  // const router = useRouter();
 
   const {
     register,
@@ -42,13 +42,13 @@ export default function SignIn() {
             title: "Error",
             description: "Invalid email or password",
           });
-        }
-        else {
+        } else {
           toast({
             title: "Success",
             description: `Sign in with ${data.email}`,
           });
-          router.push("/");
+          window.location.reload();
+          // router.push("/");
         }
       })
       .catch((error) => {
