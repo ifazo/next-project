@@ -26,12 +26,16 @@ const adminNav = [
     items: [
       {
         title: "Overview",
-        url: "/dashboard/admin",
+        url: "/dashboard/overview",
         isActive: true,
       },
       {
         title: "Analytics",
-        url: "/dashboard/admin/analytics",
+        url: "/dashboard/analytics",
+      },
+      {
+        title: "Reports",
+        url: "/dashboard/reports",
       },
     ],
   },
@@ -76,12 +80,16 @@ const sellerNav = [
     items: [
       {
         title: "Overview",
-        url: "/dashboard/seller",
+        url: "/dashboard/overview",
         isActive: true,
       },
       {
         title: "Analytics",
-        url: "/dashboard/seller/analytics",
+        url: "/dashboard/analytics",
+      },
+      {
+        title: "Reports",
+        url: "/dashboard/reports",
       },
     ],
   },
@@ -90,12 +98,30 @@ const sellerNav = [
     url: "/dashboard/seller/products",
     items: [
       {
-        title: "All Products",
+        title: "Shop Products",
         url: "/dashboard/seller/products",
       },
       {
         title: "Add Product",
         url: "/dashboard/seller/products/add",
+      },
+    ],
+  },
+  {
+    title: "Orders",
+    url: "/dashboard/seller/orders",
+    items: [
+      {
+        title: "Pending Orders",
+        url: "/dashboard/seller/orders/pending",
+      },
+      {
+        title: "Completed Orders",
+        url: "/dashboard/seller/orders/completed",
+      },
+      {
+        title: "Cancelled Orders",
+        url: "/dashboard/seller/orders/cancelled",
       },
     ],
   },
@@ -132,6 +158,10 @@ const buyerNav = [
       {
         title: "Analytics",
         url: "/dashboard/analytics",
+      },
+      {
+        title: "Reports",
+        url: "/dashboard/admin/reports",
       },
     ],
   },

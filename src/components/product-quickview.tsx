@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Product } from '@prisma/client'
+import VariantQuantitySelector from './variant-quantity-selector'
 
 interface QuickViewProps {
   product: Product
@@ -46,7 +47,7 @@ export function ProductQuickView({ product, children }: QuickViewProps) {
             </div>
             <h2 className="text-2xl font-bold mb-2">{product.name}</h2>
             <p className="text-xl font-semibold mb-4">${product.price.toFixed(2)}</p>
-            <p className="text-gray-600">{product.description}</p>
+            <VariantQuantitySelector product={product} />
           </div>
         </div>
       </DialogContent>
