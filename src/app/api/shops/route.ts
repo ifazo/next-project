@@ -1,7 +1,20 @@
 import prisma from "@/lib/prisma";
+import { NextRequest } from "next/server";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const { searchParams } = request.nextUrl;
+    const email = searchParams.get("sellerEmail");
+    if (email) {
+      const shop = await prisma.shop.findUnique({
+        where: {
+          sellerEmail: email,
+        },
+      });
+      return new Response(JSON.stringify(shop), {
+        headers: { "content-type": "application/json" },
+      });
+    }
     const shops = await prisma.shop.findMany();
     return new Response(JSON.stringify(shops), {
       headers: { "content-type": "application/json" },

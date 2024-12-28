@@ -94,16 +94,16 @@ const sellerNav = [
     ],
   },
   {
-    title: "Products",
-    url: "/dashboard/seller/products",
+    title: "Shop",
+    url: "/dashboard/seller/shop",
     items: [
       {
         title: "Shop Products",
-        url: "/dashboard/seller/products",
+        url: "/dashboard/seller/shop/products",
       },
       {
         title: "Add Product",
-        url: "/dashboard/seller/products/add",
+        url: "/dashboard/seller/shop/products/add",
       },
     ],
   },

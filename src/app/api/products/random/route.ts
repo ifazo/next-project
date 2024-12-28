@@ -6,7 +6,7 @@ export async function GET() {
 
     const shuffled = allProduct.sort(() => Math.random() - 0.5);
 
-    const products = shuffled.slice(0, 4);
+    const products = shuffled.slice(0, 6);
     return new Response(JSON.stringify(products), {
       headers: { "content-type": "application/json" },
     });

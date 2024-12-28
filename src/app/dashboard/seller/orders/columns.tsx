@@ -1,4 +1,3 @@
-// src/app/dashboard/seller/orders/columns.ts
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
