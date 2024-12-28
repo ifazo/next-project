@@ -16,7 +16,10 @@ export async function GET(request: NextRequest) {
       },
     });
     if (wishlist.length === 0) {
-      return new Response("No wishlist product found", { status: 404 });
+      return new Response(JSON.stringify(null), {
+        headers: { "content-type": "application/json" },
+        status: 404,
+      });
     }
     return new Response(JSON.stringify(wishlist), {
       headers: { "content-type": "application/json" },

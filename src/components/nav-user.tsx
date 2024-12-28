@@ -29,6 +29,7 @@ import { User } from "next-auth";
 import { useToast } from "@/hooks/use-toast";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
+import { Button } from "./ui/button";
 
 export function NavUser({ user }: { user: User }) {
   const { isMobile } = useSidebar();
@@ -83,7 +84,10 @@ export function NavUser({ user }: { user: User }) {
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <Link href="/dashboard/settings" className="flex items-center gap-2">
+                <Link
+                  href="/dashboard/settings"
+                  className="flex items-center gap-2"
+                >
                   <Sparkles />
                   Settings
                 </Link>
@@ -92,28 +96,43 @@ export function NavUser({ user }: { user: User }) {
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <Link href="/dashboard/settings/profile" className="flex items-center gap-2">
+                <Link
+                  href="/dashboard/settings/profile"
+                  className="flex items-center gap-2"
+                >
                   <BadgeCheck />
                   Profile
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <Link href="/dashboard/settings/account" className="flex items-center gap-2">
+                <Link
+                  href="/dashboard/settings/account"
+                  className="flex items-center gap-2"
+                >
                   <CreditCard />
                   Account
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <Link href="/dashboard/settings/notifications" className="flex items-center gap-2">
+                <Link
+                  href="/dashboard/settings/notifications"
+                  className="flex items-center gap-2"
+                >
                   <Bell />
                   Notifications
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleSignOut} className="text-destructive bg-destructive-foreground">
-              <LogOut />
-              Log out
+            <DropdownMenuItem>
+              <Button
+                variant="outline"
+                onClick={handleSignOut}
+                className="w-full text-destructive bg-destructive-foreground hover:text-destructive-foreground hover:bg-destructive"
+              >
+                <LogOut />
+                Log out
+              </Button>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

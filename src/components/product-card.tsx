@@ -1,24 +1,57 @@
-'use client'
+"use client";
 
-import Image from 'next/image'
-import Link from 'next/link'
-import { Eye, Heart } from 'lucide-react'
+import Image from "next/image";
+import Link from "next/link";
+import { Eye, Heart } from "lucide-react";
 
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Product } from '@prisma/client'
-import { ProductQuickView } from './product-quickview'
-import { useToast } from '@/hooks/use-toast'
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Product } from "@prisma/client";
+import { ProductQuickView } from "./product-quickview";
+import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
+import { useSession } from "next-auth/react";
 
 export function ProductCard({ product }: { product: Product }) {
   const { toast } = useToast();
-  const handleAddToWishlist = () => {
-    toast({
-      title: "Success",
-      description: "Product added to wishlist",
-    });
-  }
+  const [loading, setLoading] = useState(false);
+
+  const { data: session } = useSession();
+
+  const handleAddToWishlist = async () => {
+    setLoading(true);
+    try {
+      await fetch("/api/wishlist", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          productId: product.id,
+          userEmail: session?.user?.email,
+        }),
+      });
+      toast({
+        title: "Success",
+        description: "Product added to wishlist.",
+      });
+    } catch (error) {
+      console.error("Failed to add to wishlist:", error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Card className="group relative overflow-hidden">
@@ -64,7 +97,9 @@ export function ProductCard({ product }: { product: Product }) {
         <div className="flex items-center justify-between">
           <div>
             <h3 className="font-semibold">
-              {product.name.length > 15 ? `${product.name.slice(0, 20)}...` : product.name}
+              {product.name.length > 15
+                ? `${product.name.slice(0, 20)}...`
+                : product.name}
             </h3>
             <p className="text-sm text-muted-foreground">{product.shopName}</p>
           </div>
@@ -75,11 +110,10 @@ export function ProductCard({ product }: { product: Product }) {
       </CardContent>
       <CardFooter className="p-4 pt-0">
         <Button onClick={() => handleAddToWishlist()} className="w-full">
-          <Heart className="mr-2 h-4 w-4" />
-          Add to wishlist
+        <Heart className={`mr-2 h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+        {loading ? 'Adding...' : 'Add to wishlist'}
         </Button>
       </CardFooter>
     </Card>
-  )
+  );
 }
-
