@@ -179,7 +179,7 @@ export function AppSidebar({ user, role }: { user: User; role: string }) {
                   <Image height={24} width={24} src="/logo.png" alt="logo" />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-semibold">Ifaz.next</span>
+                  <span className="font-semibold">ifaz.next</span>
                   <span className="">{role}</span>
                 </div>
               </Link>

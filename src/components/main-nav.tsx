@@ -13,7 +13,7 @@ export function MainNav() {
       <Link href="/" className="mr-4 flex items-center gap-2 lg:mr-6">
         <Image height={24} width={24} src="/logo.png" alt="logo" />
         <span className="hidden font-bold lg:inline-block">
-            Ifaz.next
+            ifaz.next
         </span>
       </Link>
       <nav className="flex items-center gap-4 text-sm xl:gap-6">

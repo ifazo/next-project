@@ -1,48 +1,106 @@
-import { Button } from "@/components/ui/button"
-import { Github, Linkedin } from 'lucide-react'
-import Image from "next/image"
+import { Facebook, Github, Linkedin, Twitch } from "lucide-react";
+import Image from "next/image";
 
-export function Footer() {
+const sections = [
+  {
+    title: "Product",
+    links: [
+      { name: "Overview", href: "#" },
+      { name: "Pricing", href: "#" },
+      { name: "Marketplace", href: "#" },
+      { name: "Features", href: "#" },
+    ],
+  },
+  {
+    title: "Shops",
+    links: [
+      { name: "Overview", href: "#" },
+      { name: "Pricing", href: "#" },
+      { name: "Marketplace", href: "#" },
+      { name: "Features", href: "#" },
+    ],
+  },
+  {
+    title: "Category",
+    links: [
+      { name: "Overview", href: "#" },
+      { name: "Pricing", href: "#" },
+      { name: "Marketplace", href: "#" },
+      { name: "Features", href: "#" },
+    ],
+  },
+];
+
+export default function Footer() {
   return (
-    <footer className="border-t">
-      <div className="container flex items-center justify-between py-2">
-        <div className="flex items-center ml-8">
-          <Image height={24} width={24} src="/logo.png" alt="logo" />
-          <span className="text-lg font-semibold px-2">Ifaz.next</span>
-        </div>
-        <div className="flex items-center space-x-2">
-          <Button variant="ghost" size="icon" asChild>
-            <a href="https://google.com" target="_blank" rel="noopener noreferrer">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="h-5 w-5"
-              >
-                <path d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z" />
-              </svg>
-              <span className="sr-only">Google</span>
-            </a>
-          </Button>
-          <Button variant="ghost" size="icon" asChild>
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer">
-              <Github className="h-5 w-5" />
-              <span className="sr-only">GitHub</span>
-            </a>
-          </Button>
-          <Button variant="ghost" size="icon" asChild>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
-              <Linkedin className="h-5 w-5" />
-              <span className="sr-only">LinkedIn</span>
-            </a>
-          </Button>
-        </div>
+    <section className="p-8 bg-secondary">
+      <div className="container">
+        <footer>
+          <div className="flex flex-col items-center justify-between gap-10 text-center lg:flex-row lg:text-left">
+            <div className="flex w-full max-w-96 shrink flex-col items-center justify-between gap-6 lg:items-start">
+              <div>
+                <span className="flex items-center justify-center gap-4 lg:justify-start">
+                  <Image width={44} height={44} src="/logo.png" alt="logo" />
+                  <p className="text-3xl font-semibold">ifaz.next</p>
+                </span>
+                <p className="mt-6 text-sm text-muted-foreground">
+                  ifaz.next is your best e-commerce solution.
+                </p>
+              </div>
+              <ul className="flex items-center space-x-6 text-muted-foreground">
+                <li className="font-medium hover:text-primary">
+                  <a href="#">
+                    <Github className="size-6" />
+                  </a>
+                </li>
+                <li className="font-medium hover:text-primary">
+                  <a href="#">
+                    <Facebook className="size-6" />
+                  </a>
+                </li>
+                <li className="font-medium hover:text-primary">
+                  <a href="#">
+                    <Linkedin className="size-6" />
+                  </a>
+                </li>
+                <li className="font-medium hover:text-primary">
+                  <a href="#">
+                    <Twitch className="size-6" />
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div className="grid grid-cols-3 gap-6 lg:gap-20">
+              {sections.map((section, sectionIdx) => (
+                <div key={sectionIdx}>
+                  <h3 className="mb-6 font-bold">{section.title}</h3>
+                  <ul className="space-y-4 text-sm text-muted-foreground">
+                    {section.links.map((link, linkIdx) => (
+                      <li
+                        key={linkIdx}
+                        className="font-medium hover:text-primary"
+                      >
+                        <a href={link.href}>{link.name}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="mt-8 flex flex-col justify-between gap-4 border-t pt-8 text-center text-sm font-medium text-muted-foreground lg:flex-row lg:items-center lg:text-left">
+            <p>© 2025 Ifaz IT. All rights reserved.</p>
+            <ul className="flex justify-center gap-4 lg:justify-start">
+              <li className="hover:text-primary">
+                <a href="#"> Terms and Conditions</a>
+              </li>
+              <li className="hover:text-primary">
+                <a href="#"> Privacy Policy</a>
+              </li>
+            </ul>
+          </div>
+        </footer>
       </div>
-    </footer>
-  )
+    </section>
+  );
 }
-
