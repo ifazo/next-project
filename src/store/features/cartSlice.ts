@@ -64,6 +64,13 @@ const productSlice = createSlice({
       );
       saveState(state);
     },
+    updateQuantity: (state, action: PayloadAction<{ id: string; quantity: number }>) => {
+      const product = state.products.find((product: Product) => product.id === action.payload.id);
+      if (product) {
+        product.quantity = action.payload.quantity;
+        saveState(state);
+      }
+    },
     clearProducts: (state) => {
       state.products = [];
       saveState(state);
@@ -82,7 +89,7 @@ export const selectCartTotal = (state: RootState) => {
 export const selectCartItemsCount = (state: RootState) =>
   state.cart.products.length;
 
-export const { addProduct, removeProduct, clearProducts } =
+export const { addProduct, removeProduct, updateQuantity, clearProducts } =
   productSlice.actions;
 
 export default productSlice;

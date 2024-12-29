@@ -23,7 +23,7 @@ export default async function BuyerWishlistPage () {
 
   return (
     <div className="lg:col-span-2">
-      <h2 className="text-2xl font-bold mb-6">Shop Products</h2>
+      <h2 className="text-2xl font-bold mb-6">Wishlist Products</h2>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {data?.map((data: Wishlist) => (
           <WishlistProduct key={data.id} id={data.id} productId={data.productId} email={email} />

@@ -40,16 +40,20 @@ const adminNav = [
     ],
   },
   {
-    title: "Products",
-    url: "/products",
+    title: "Managements",
+    url: "/dashboard/admin/managements",
     items: [
       {
-        title: "All Products",
-        url: "/products",
+        title: "Users",
+        url: "/dashboard/admin/managements/users",
       },
       {
-        title: "Add Product",
-        url: "/products/add",
+        title: "Shops",
+        url: "/dashboard/admin/managements/shops",
+      },
+      {
+        title: "Categories",
+        url: "/dashboard/admin/managements/categories",
       },
     ],
   },
@@ -166,12 +170,16 @@ const buyerNav = [
     ],
   },
   {
-    title: "Wishlist",
+    title: "Products",
     url: "/dashboard/buyer/wishlist",
     items: [
       {
-        title: "Products",
+        title: "Wishlist",
         url: "/dashboard/buyer/wishlist",
+      },
+      {
+        title: "Cart",
+        url: "/dashboard/buyer/cart",
       },
     ],
   },

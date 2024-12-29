@@ -10,9 +10,10 @@ import {
 } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { Product } from "@prisma/client";
-import { Package } from "lucide-react";
+import { Package, Trash } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { ProductQuickView } from "./product-quickview";
 
 export default function WishlistProduct({
   id,
@@ -112,17 +113,19 @@ export default function WishlistProduct({
           </p>
           <div className="font-bold">${product.price.toFixed(2)}</div>
         </CardContent>
-        <CardFooter className="p-4 pt-0 flex flex-col gap-2">
+        <CardFooter className="px-4 py-2 flex flex-row gap-2 justify-center items-center">
+          <ProductQuickView product={product}>
           <Button variant="outline" className="w-full">
             <Package className="h-4 w-4 mr-2" />
-            Add to Cart
+            View Product
           </Button>
+          </ProductQuickView>
           <Button
             onClick={handleDelete}
             variant="outline"
             className="w-full text-destructive bg-destructive-foreground hover:text-destructive-foreground hover:bg-destructive"
           >
-            <Package className="h-4 w-4 mr-2" />
+            <Trash className="h-4 w-4 mr-2" />
             Remove Product
           </Button>
         </CardFooter>
