@@ -151,12 +151,28 @@ model Order {
   id          String   @id @default(uuid())
   paymentId   String   @unique @map("payment_id")
   status      String   @default("pending")
-  userEmail   String   @map("user_email")
-  products    Json[]
   totalAmount Float    @map("total_amount")
+  products    Cart[]
+  userEmail   String   @map("user_email")
   user        User     @relation(fields: [userEmail], references: [email])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   @@map("orders")
+}
+
+model Cart {
+  id           String  @id @default(uuid())
+  productId    String  @map("product_id")
+  name         String
+  price        Float
+  variant      String
+  quantity     Int
+  image        String
+  shopName     String  @map("shop_name")
+  categorySlug String  @map("category_slug")
+  Order        Order?  @relation(fields: [orderId], references: [id])
+  orderId      String?
+
+  @@map("order_products")
 }

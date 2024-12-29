@@ -181,6 +181,10 @@ const buyerNav = [
         title: "Cart",
         url: "/dashboard/buyer/cart",
       },
+      {
+        title: "Orders",
+        url: "/dashboard/buyer/orders",
+      },
     ],
   },
   {

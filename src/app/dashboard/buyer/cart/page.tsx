@@ -29,7 +29,6 @@ const stripePromise = loadStripe(
 
 export default function CartPage() {
   const dispatch = useAppDispatch();
-
   const cartItems = useAppSelector(selectCartItems);
   const cartTotal = useAppSelector(selectCartTotal);
   const itemsCount = useAppSelector(selectCartItemsCount);
