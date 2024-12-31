@@ -95,7 +95,7 @@ export default function SignIn() {
   };
 
   return (
-    <div className="flex h-screen w-full items-center justify-center px-4">
+    <div className="flex w-full items-center justify-center m-8">
       <Card>
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl">Login to your account</CardTitle>

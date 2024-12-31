@@ -15,17 +15,21 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useState } from "react";
+import Image from "next/image";
 
 type Inputs = {
   name: string;
   role: "buyer" | "seller";
   email: string;
   password: string;
+  image: FileList;
 };
 
 export default function SignUp() {
   const router = useRouter();
   const { toast } = useToast();
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
@@ -34,36 +38,86 @@ export default function SignUp() {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    const { name, role, email, password } = data;
+    try {
+      let imageUrl = "";
 
-    const response = await fetch("/api/users", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name, role, email, password }),
-    });
-    const result = await response.json();
+      toast({
+        title: "Loading",
+        description: "Creating your account",
+      });
 
-    if (!result) {
+      if (data.image && data.image[0]) {
+        const formData = new FormData();
+        formData.append("image", data.image[0]);
+
+        const imgbbResponse = await fetch(
+          `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API}`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        const imgbbResult = await imgbbResponse.json();
+
+        if (!imgbbResponse.ok || !imgbbResult.success) {
+          throw new Error("Failed to upload image to imgbb");
+        }
+
+        imageUrl = imgbbResult.data.display_url;
+      }
+
+      const response = await fetch("/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: data.name,
+          role: data.role,
+          email: data.email,
+          password: data.password,
+          image: imageUrl,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create user");
+      }
+
+      await response.json();
+
+      toast({
+        title: "Success",
+        description: `Sign up with ${data.email}`,
+      });
+
+      router.push("/sign-in");
+    } catch (error) {
+      console.error(error);
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Failed to create user",
+        description: "An error occurred",
       });
-    } else {
-      toast({
-        title: "Success",
-        description: `Sign up with ${email}`,
-      });
-      router.push("/sign-in");
     }
   };
 
   const selectedRole = watch("role");
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
-    <div className="flex h-screen w-full items-center justify-center px-4">
+    <div className="flex w-full items-center justify-center m-8">
       <Card>
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl">Create an account</CardTitle>
@@ -85,7 +139,7 @@ export default function SignUp() {
                 type="radio"
                 value="buyer"
                 id="buyer"
-                className="hidden" 
+                className="hidden"
               />
               Buyer
             </label>
@@ -123,10 +177,31 @@ export default function SignUp() {
           </div>
           <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
             <div className="grid gap-2">
+              {imagePreview && (
+                <div className="flex justify-center items-center mt-2">
+                  <Image
+                    src={imagePreview}
+                    alt="Profile picture preview"
+                    width={100}
+                    height={100}
+                    className="rounded-full object-cover"
+                  />
+                </div>
+              )}
+              <Label htmlFor="image">Profile</Label>
+              <Input
+                id="image"
+                type="file"
+                accept="image/*"
+                {...register("image")}
+                onChange={handleImageChange}
+              />
+            </div>
+            <div className="grid gap-2">
               <Label htmlFor="name">Name</Label>
               <Input
                 id="name"
-                type="name"
+                type="text"
                 placeholder="Your name"
                 {...register("name", { required: true })}
               />
