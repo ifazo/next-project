@@ -38,10 +38,10 @@ export async function POST(request: Request) {
       );
     }
     const data = await request.json();
-    const { name, sellerEmail } = data;
     if (!data) {
       return new Response("Request body is required", { status: 400 });
     }
+    const { name, sellerEmail } = data;
     const existingShopBySeller = await prisma.shop.findUnique({
       where: {
         sellerEmail,

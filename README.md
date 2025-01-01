@@ -32,7 +32,7 @@ Email: `admin@mail.com`
 Password: `123456`
 
 #### Seller Account
-Email: `seller1@mail.com`  
+Email: `seller@mail.com`  
 Password: `123456`
 
 #### Buyer Account
