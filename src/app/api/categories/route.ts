@@ -22,15 +22,15 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const role = request.headers.get("role");
-    if (role !== "admin") {
-      return new Response(
-        JSON.stringify({
-          error: "Forbidden: Only admins can perform this action",
-        }),
-        { status: 403, headers: { "content-type": "application/json" } }
-      );
-    }
+    // const role = request.headers.get("role");
+    // if (role !== "admin") {
+    //   return new Response(
+    //     JSON.stringify({
+    //       error: "Forbidden: Only admins can perform this action",
+    //     }),
+    //     { status: 403, headers: { "content-type": "application/json" } }
+    //   );
+    // }
     const category = await prisma.category.create({
       data: body,
     });
