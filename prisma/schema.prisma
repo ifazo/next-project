@@ -26,7 +26,7 @@ model User {
   email         String     @unique
   emailVerified DateTime?  @map("email_verified")
   password      String?
-  status        String     @default("active")
+  status        Status     @default(active)
   accounts      Account[]
   sessions      Session[]
   createdAt     DateTime   @default(now())
@@ -84,6 +84,7 @@ model Category {
   slug      String    @unique
   image     String
   details   String
+  status    Status    @default(active)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   products  Product[]
@@ -99,6 +100,7 @@ model Shop {
   address     String
   sellerEmail String    @unique @map("seller_email")
   user        User      @relation(fields: [sellerEmail], references: [email])
+  status      Status    @default(active)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   products    Product[]
