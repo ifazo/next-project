@@ -15,8 +15,12 @@ export async function GET(request: NextRequest) {
         headers: { "content-type": "application/json" },
       });
     }
-    const shops = await prisma.shop.findMany();
-    return new Response(JSON.stringify(shops), {
+    const activeShops = await prisma.shop.findMany({
+      where: {
+        status: "active",
+      },
+    });
+    return new Response(JSON.stringify(activeShops), {
       headers: { "content-type": "application/json" },
     });
   } catch (error) {

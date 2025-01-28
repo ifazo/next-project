@@ -10,6 +10,7 @@ import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
 import { CartModal } from "./cart-modal";
+import { ThemeCustomizer } from "./theme-customizer";
 
 export function Navbar() {
   const { data: session } = useSession();
@@ -34,6 +35,7 @@ export function Navbar() {
           </div>
           <nav className="flex items-center gap-2">
             <ModeSwitcher />
+            <ThemeCustomizer />
             <CartModal />
             {session?.user ? (
               <Button

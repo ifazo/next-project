@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import { Playfair_Display } from "next/font/google";
-import "./globals.css";
 import { Providers } from "./providers";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
+import { ThemeWrapper } from "@/components/theme-wrapper";
+
+import "./globals.css";
+import "./themes.css";
 
 const playfairDisplay = Playfair_Display({
   subsets: ["latin"],
@@ -29,10 +32,12 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${playfairDisplay.className} antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <Providers>
-            <main>{children}</main>
-            <Toaster />
-          </Providers>
+          <ThemeWrapper>
+            <Providers>
+              <main>{children}</main>
+              <Toaster />
+            </Providers>
+          </ThemeWrapper>
         </ThemeProvider>
       </body>
     </html>
