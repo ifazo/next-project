@@ -333,7 +333,10 @@ export function ProductReviews({ productId }: { productId: string }) {
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={isSubmitting}>
+              <Button 
+              type="submit"
+              variant="default"
+               disabled={isSubmitting}>
                 {isSubmitting
                   ? "Submitting..."
                   : editingReview

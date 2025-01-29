@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+// import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
@@ -10,13 +10,13 @@ if (!process.env.STRIPE_SECRET_KEY) {
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export async function POST(req: NextRequest) {
-  const session = await auth();
-  if (!session) {
-    return NextResponse.redirect(`${process.env.BASE_URL}/sign-in`);
-  }
-  const email = session?.user?.email as string;
+  // const session = await auth();
+  // if (!session) {
+  //   return NextResponse.redirect(`${process.env.BASE_URL}/sign-in`);
+  // }
+  // const email = session?.user?.email as string;
   try {
-    const { products } = await req.json();
+    const { products, email } = await req.json();
     const customer = await stripe.customers.create({
       email,
     });

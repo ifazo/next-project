@@ -48,28 +48,41 @@ export async function GET(request: NextRequest) {
 
     const whereClause: {
       name?: { contains: string; mode: "insensitive" };
-      shop?: { name: { in: string[] } };
-      category?: { slug: { in: string[] } };
+      OR?: Array<{
+        shop?: { name: { in: string[] } };
+        category?: { slug: { in: string[] } };
+      }>;
       price?: { gte: number; lte: number };
     } = {};
 
     if (search) {
       whereClause.name = { contains: search, mode: "insensitive" };
     }
-    if (shopNames.length > 0) {
-      whereClause.shop = {
-        name: {
-          in: shopNames,
-        },
-      };
+
+    if (shopNames.length > 0 || categorySlugs.length > 0) {
+      whereClause.OR = [];
+
+      if (shopNames.length > 0) {
+        whereClause.OR.push({
+          shop: {
+            name: {
+              in: shopNames,
+            },
+          },
+        });
+      }
+
+      if (categorySlugs.length > 0) {
+        whereClause.OR.push({
+          category: {
+            slug: {
+              in: categorySlugs,
+            },
+          },
+        });
+      }
     }
-    if (categorySlugs.length > 0) {
-      whereClause.category = {
-        slug: {
-          in: categorySlugs,
-        },
-      };
-    }
+
     if (minPrice || maxPrice) {
       whereClause.price = {
         gte: minPrice,
@@ -88,16 +101,22 @@ export async function GET(request: NextRequest) {
       orderBy: {
         createdAt: "desc",
       },
+      include: {
+        shop: true,
+        category: true,
+      },
     });
 
     return new Response(JSON.stringify({ products, totalProducts }), {
       headers: { "content-type": "application/json" },
     });
   } catch (error) {
+    console.error("Error fetching products:", error);
     return new Response(
       JSON.stringify({ error: "Error fetching products", details: error }),
       {
         headers: { "content-type": "application/json" },
+        status: 500,
       }
     );
   }

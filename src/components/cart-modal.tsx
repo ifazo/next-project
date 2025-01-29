@@ -23,6 +23,8 @@ import {
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { Product as PrismaProduct } from "@prisma/client";
 import { loadStripe } from "@stripe/stripe-js";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 interface Product extends PrismaProduct {
   variant: string;
@@ -36,12 +38,13 @@ const stripePromise = loadStripe(
 export function CartModal() {
   const [isOpen, setIsOpen] = useState(false);
 
+  const { toast } = useToast();
+  const { data: session } = useSession();
   const dispatch = useAppDispatch();
 
   const cartItems = useAppSelector(selectCartItems);
   const cartTotal = useAppSelector(selectCartTotal);
   const itemsCount = useAppSelector(selectCartItemsCount);
-  const { toast } = useToast();
 
   const handleRemoveItem = (id: string) => {
     dispatch(removeProduct(id));
@@ -52,6 +55,14 @@ export function CartModal() {
   };
 
   const handleCheckout = async () => {
+    if (!session) {
+          toast({
+            title: "Error",
+            description: "You need to be logged in to checkout",
+            variant: "destructive",
+          });
+          redirect("/sign-in");
+        }
     toast({
       title: "Checking out",
       description: "Redirecting to checkout...",
@@ -74,8 +85,8 @@ export function CartModal() {
         products: cartItems,
       }),
     });
-    const session = await response.json();
-    const result = await stripe.redirectToCheckout({ sessionId: session.id });
+    const paymentSession = await response.json();
+    const result = await stripe.redirectToCheckout({ sessionId: paymentSession.id });
     if (result.error) {
       console.error(result.error.message);
     }

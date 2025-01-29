@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Check, Laptop, Moon, Repeat, Sun } from "lucide-react"
+import { Check, Laptop, Moon, Palette, Repeat, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 
 import { cn } from "@/lib/utils"
@@ -31,7 +31,7 @@ export function ThemeCustomizer() {
       <Drawer>
         <DrawerTrigger asChild>
           <Button size="sm" className="md:hidden">
-            Color
+            <Palette />
           </Button>
         </DrawerTrigger>
         <DrawerContent className="p-6 pt-0">
@@ -41,7 +41,9 @@ export function ThemeCustomizer() {
       <div className="hidden items-center md:flex">
         <Popover>
           <PopoverTrigger asChild>
-            <Button size="sm">Color</Button>
+            <Button size="sm">
+              <Palette />
+            </Button>
           </PopoverTrigger>
           <PopoverContent
             align="start"
@@ -123,9 +125,8 @@ function Customizer() {
                     )}
                     style={
                       {
-                        "--theme-primary": `hsl(${
-                          theme?.activeColor[mode === "dark" ? "dark" : "light"]
-                        })`,
+                        "--theme-primary": `hsl(${theme?.activeColor[mode === "dark" ? "dark" : "light"]
+                          })`,
                       } as React.CSSProperties
                     }
                   >
@@ -161,7 +162,7 @@ function Customizer() {
                   }}
                   className={cn(
                     config.radius === parseFloat(value) &&
-                      "border-2 border-primary"
+                    "border-2 border-primary"
                   )}
                 >
                   {value}

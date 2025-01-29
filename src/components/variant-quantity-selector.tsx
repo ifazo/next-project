@@ -10,6 +10,8 @@ import { useAppDispatch } from "@/store/hook";
 import { addProduct } from "@/store/features/cartSlice";
 import { useToast } from "@/hooks/use-toast";
 import { CreditCard, ShoppingCart } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
@@ -23,6 +25,7 @@ export default function VariantQuantitySelector({
   const [quantity, setQuantity] = useState(1);
   const [variant, setVariant] = useState(product.variants[0]);
 
+  const { data: session } = useSession();
   const { toast } = useToast();
   const dispatch = useAppDispatch();
   const totalPrice = product.price * quantity;
@@ -40,6 +43,14 @@ export default function VariantQuantitySelector({
   };
 
   const handlePayment = async () => {
+    if (!session) {
+      toast({
+        title: "Error",
+        description: "You need to be logged in to checkout",
+        variant: "destructive",
+      });
+      redirect("/sign-in");
+    }
     toast({
       title: "Checking out",
       description: "Redirecting to checkout...",
@@ -56,10 +67,11 @@ export default function VariantQuantitySelector({
       },
       body: JSON.stringify({
         products: [{ ...product, quantity, variant }],
+        email: session?.user?.email,
       }),
     });
-    const session = await response.json();
-    const result = await stripe.redirectToCheckout({ sessionId: session.id });
+    const paymentSession = await response.json();
+    const result = await stripe.redirectToCheckout({ sessionId: paymentSession.id });
     if (result.error) {
       console.error(result.error.message);
     }
