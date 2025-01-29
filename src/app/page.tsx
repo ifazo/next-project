@@ -1,4 +1,6 @@
 import BrowseCategories from "@/components/browse-categories";
+import CTA from "@/components/cta";
+import FAQ from "@/components/faq";
 import FeaturedShops from "@/components/featured-shops";
 import Hero from "@/components/hero";
 
@@ -8,6 +10,8 @@ export default function Home() {
       <Hero />
       <FeaturedShops />
       <BrowseCategories />
+      <FAQ />
+      <CTA />
     </div>
   );
 }
